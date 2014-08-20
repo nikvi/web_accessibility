@@ -10,7 +10,7 @@ class ParseCSV
    # Public: ParseCSV constructor
    #
    # filename - A String containing the path to the CSV file to be parsed.
-   # source - A String describing where the CSV came from
+   # source - A String describing where the CSV came from (examples: "siteimprove", "google")
    def initialize(filename,source)
       @csv_filename=filename
       @csv_source=source
