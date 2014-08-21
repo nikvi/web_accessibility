@@ -3,4 +3,4 @@
 require 'csv'
 #remove comment to add charlock
 #require 'charlock_holmes/string'   
-require '../lib/parse_csv' 
+require '../lib/parseCsv' 
