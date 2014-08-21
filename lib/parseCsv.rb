@@ -64,7 +64,7 @@ class ParseCSV
    end
 
       def get_urls()
-      puts @arr_of_urls
+      @arr_of_urls
    end
 
 end
