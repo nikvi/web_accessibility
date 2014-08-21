@@ -4,7 +4,8 @@
 # @author: Andrew Normand
 
 require 'csv'
-require 'charlock_holmes/string'    
+# If using CharlockHolmes Encoding Detector, uncomment this
+# require 'charlock_holmes/string'    
 
 class ParseCSV
    # Public: ParseCSV constructor
@@ -25,12 +26,18 @@ class ParseCSV
    def parse_file
       if @csv_source == "siteimprove"
             column_seperator = "\t" 
+            # If using CharlockHolmes Encoding Detector, uncomment this
+            #detection = CharlockHolmes::EncodingDetector.detect(contents)
+            #@csv_encoding = detection[:encoding]
+            @csv_encoding = "UTF-16LE"
       elsif @csv_source == "google"         
             column_seperator = ","
+            # If using CharlockHolmes Encoding Detector, uncomment this 
+            #detection = CharlockHolmes::EncodingDetector.detect(contents)
+            #@csv_encoding = detection[:encoding]
+            @csv_encoding = "ISO-8859-1"
       end
       contents = File.read(@csv_filename)
-      detection = CharlockHolmes::EncodingDetector.detect(contents)
-      @csv_encoding = detection[:encoding]
       output_encoding = @csv_encoding + ":UTF-8"
       arr_csv_contents = CSV.read(@csv_filename, { :encoding => output_encoding, :headers => true, :col_sep => column_seperator, :skip_blanks => true })
 
