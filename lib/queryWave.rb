@@ -2,6 +2,7 @@
 require_relative './parseCsv.rb'
 require 'net/http'
 require '../config/waveApiConfig'
+require 'json'
 
 class QueryWaveAPI
 
@@ -26,11 +27,16 @@ end
 
 def query_wave(count)
 
-	url = get_urls(count)
-	url.each do |u|
+	urls = get_urls(count)
+	resp_array = Array.new
+	urls[0..0].each do |u|
     	resp = Net::HTTP.get_response(URI.parse(u))
-    	puts resp.body
+    	#data is added only is the request is successful
+    	data = resp.body if resp.is_a?(Net::HTTPSuccess)
+    	puts JSON.parse(data)
+    	#resp_array.push resp.body if resp.is_a?(Net::HTTPSuccess)
 	end
+
 end
 
 
