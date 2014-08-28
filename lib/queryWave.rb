@@ -13,14 +13,25 @@ def initialize(file_name,source,report_type=2)
 end
 
 
-def get_urls()
-  url_data = @parser.get_urls()
-  #url_data.each { |x| puts  WaveConfig::WAVE_API_URL + "key="+WaveConfig::WAVE_API_KEY+ "&url="+ x + "&reporttype="+@report_type }
-
+def get_urls(count)
+	url_data = @parser.get_urls
+	query_urls = Array.new
+	url_data[0..(count-1)].each do |x| 
+  		str = "#{WaveConfig::WAVE_API_URL}key=#{WaveConfig::WAVE_API_KEY}&url=#{x}&reporttype=#{@report_type}" 
+    	query_urls.push str
+  	end
+	return query_urls
 end
 
 
+def query_wave(count)
 
+	url = get_urls(count)
+	url.each do |u|
+    	resp = Net::HTTP.get_response(URI.parse(u))
+    	puts resp.body
+	end
+end
 
 
 
