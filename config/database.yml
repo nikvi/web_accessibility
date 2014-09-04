@@ -1,0 +1,7 @@
+#database.yml
+development:
+  adapter: postgresql
+  database: accessibility-reports
+  username: postgres
+  password: tiger
+  host: localhost
