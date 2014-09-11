@@ -1,10 +1,7 @@
-#app.rb
+#category.rb
 require 'sinatra'
 require 'sinatra/activerecord'
 require './config/environments'
 
-
-
-get '/' do
-    "Hello, World!"
+class  Category < ActiveRecord::Base
 end
