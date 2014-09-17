@@ -7,11 +7,11 @@ WHERE
     datname = 'accessibility-reports';
 
 -- Drop Tables
-DROP TABLE category;
-DROP TABLE page;
-DROP TABLE report;
-DROP TABLE website;
-DROP TABLE description;
+DROP TABLE categories;
+DROP TABLE pages;
+DROP TABLE reports;
+DROP TABLE websites;
+DROP TABLE descriptions;
 
 -- Switch database
 Database: postgres
