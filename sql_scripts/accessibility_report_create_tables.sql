@@ -63,8 +63,8 @@ CREATE TABLE categories
 -- Create Foreign Key: pages.website_id -> websites.websites.id
 ALTER TABLE pages ADD CONSTRAINT FK_pages_website_id_websites_id FOREIGN KEY (website_id) REFERENCES websites(id);
 
--- Create Foreign Key: reports.website_id -> websites.id
-ALTER TABLE reports ADD CONSTRAINT FK_reports_website_id_websites_id FOREIGN KEY (website_id) REFERENCES websites(id);
+-- Create Foreign Key: pages.report_id -> reports.id
+ALTER TABLE pages ADD CONSTRAINT FK_pages_report_id_reports_id FOREIGN KEY (report_id) REFERENCES reports(id);
 
 -- Create Foreign Key: categories.page_id -> pages.id
 ALTER TABLE categories ADD CONSTRAINT FK_categories_page_id_pages_id FOREIGN KEY (page_id) REFERENCES pages(id);
