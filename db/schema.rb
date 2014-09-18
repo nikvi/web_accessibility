@@ -11,13 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140911012523) do
+ActiveRecord::Schema.define(version: 0) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "categories", id: false, force: true do |t|
-    t.integer "id",                            null: false
+  create_table "categories", force: true do |t|
     t.integer "page_id",                       null: false
     t.string  "category_name",     limit: 250
     t.string  "description_name",  limit: 250
@@ -25,32 +24,28 @@ ActiveRecord::Schema.define(version: 20140911012523) do
     t.integer "count"
   end
 
-  create_table "descriptions", id: false, force: true do |t|
-    t.integer "id",                  null: false
-    t.string  "name",    limit: 250
-    t.string  "title",   limit: 250
-    t.string  "type",    limit: 250
-    t.string  "summary", limit: 250
+  create_table "descriptions", force: true do |t|
+    t.string "name",    limit: 250
+    t.string "title",   limit: 250
+    t.string "type",    limit: 250
+    t.string "summary", limit: 250
   end
 
-  create_table "pages", id: false, force: true do |t|
+  create_table "pages", force: true do |t|
     t.integer "website_id",             null: false
-    t.integer "id",                     null: false
     t.string  "page_url",   limit: 250
     t.string  "page_title", limit: 250
     t.string  "wave_url",   limit: 250
   end
 
-  create_table "reports", id: false, force: true do |t|
-    t.integer  "id",          null: false
+  create_table "reports", force: true do |t|
     t.datetime "report_date"
     t.integer  "website_id",  null: false
   end
 
-  create_table "websites", id: false, force: true do |t|
-    t.integer "id",                       null: false
-    t.string  "website_url",  limit: 250
-    t.string  "website_name", limit: 250
+  create_table "websites", force: true do |t|
+    t.string "website_url",  limit: 250
+    t.string "website_name", limit: 250
   end
 
 end

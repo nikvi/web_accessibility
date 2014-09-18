@@ -40,7 +40,19 @@ def query_wave(count)
     	resp = Net::HTTP.get_response(URI.parse(u))
     	#data is added only is the request is successful
     	data = resp.body if resp.is_a?(Net::HTTPSuccess)
-    	puts JSON.parse(data)
+    	dt = JSON.parse(data)
+    	if dt["status"]["success"]    	    
+    	  	page_url = data["statistics"]["pageurl"]
+    		page_title = data["statistics"]["pagetitle"]
+    		wave_url = data["statistics"]["waveurl"]
+    		#create an array for errors
+    		# error_count = data["categories"]["error"]["items"]
+    		# alert_count = data["categories"]["alert"] ["items"].length
+    		puts page_url + " " + page_title +" " + wave_url 
+    	 else
+    		puts "error"
+    	 end
+
     	#resp_array.push JSON.parse(resp.body) if resp.is_a?(Net::HTTPSuccess)
 	end
 	#@db.pushToDB(resp_array)
