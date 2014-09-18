@@ -43,7 +43,7 @@ class DBAccess
 
    def pushPageToDB()
 
-      @page = Page.new(website_id: "1", page_url: "http://library.unimelb.edu.au", page_title: "Library Home Page", wave_url: "http://wave.webaim.org/report#/library.unimelb.edu.au")
+      @page = Page.new(report_id: "1", page_url: "http://library.unimelb.edu.au", page_title: "Library Home Page", wave_url: "http://wave.webaim.org/report#/library.unimelb.edu.au")
       if  @page.save
           puts("saved")
 
