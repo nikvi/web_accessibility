@@ -16,7 +16,7 @@ CREATE TABLE descriptions
 CREATE TABLE pages
 (
 	id serial PRIMARY KEY
-	,website_id INTEGER NOT NULL
+	,report_id INTEGER NOT NULL
 	,page_url VARCHAR(250)  NULL 
 	,page_title VARCHAR(250)  NULL 
 	,wave_url VARCHAR(250)  NULL 
