@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   create_table "pages", force: true do |t|
-    t.integer "website_id",             null: false
+    t.integer "report_id",              null: false
     t.string  "page_url",   limit: 250
     t.string  "page_title", limit: 250
     t.string  "wave_url",   limit: 250
