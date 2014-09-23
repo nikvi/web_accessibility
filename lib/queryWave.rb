@@ -5,6 +5,7 @@
 # @author: Nikki Vinayan
 require_relative './parseCsv.rb'
 require_relative './databaseAcess.rb'
+require_relative './waveData.rb'
 require 'net/http'
 require '../config/waveApiConfig'
 require 'json'
@@ -31,31 +32,62 @@ def get_urls(count)
 end
 
 
-#used to query the Wave API and then pass on data to dataBase layer
+#used to query the Wave API andd converst response to ruby object
 def query_wave(count)
 
 	urls = get_urls(count)
-	resp_array = Array.new
-	urls[0..0].each do |u|
+	response_array = Array.new
+	urls[0..(count-1)].each do |u|
     	resp = Net::HTTP.get_response(URI.parse(u))
-    	#data is added only is the request is successful
-    	data = resp.body if resp.is_a?(Net::HTTPSuccess)
-    	dt = JSON.parse(data)
-    	if dt["status"]["success"]    	    
-    	  	page_url = data["statistics"]["pageurl"]
-    		page_title = data["statistics"]["pagetitle"]
-    		wave_url = data["statistics"]["waveurl"]
-    		#create an array for errors
-    		# error_count = data["categories"]["error"]["items"]
-    		# alert_count = data["categories"]["alert"] ["items"].length
-    		puts page_url + " " + page_title +" " + wave_url 
-    	 else
-    		puts "error"
-    	 end
+        if resp.is_a?(Net::HTTPSuccess)
+    	data = JSON.parse(resp.body)
+        	if (data["status"]["success"])    	    
+        	  	page_url = data["statistics"]["pageurl"]
+        		page_title = data["statistics"]["pagetitle"]
+        		wave_url = data["statistics"]["waveurl"]
+                wv_data = WaveData.new("http://gradresearch.unimelb.edu.au","Graduate Research",page_url,page_title,wave_url)
+                wv_data.createCategories(data["categories"]["error"]["items"],"error")
+                response_array <<wv_data
+            else
+               puts "Error in Wave Response" 
+            end
+        else
+    		puts "Invalid HTTP response"
+    	end
+    end
+    
+    return response_array
+end
 
-    	#resp_array.push JSON.parse(resp.body) if resp.is_a?(Net::HTTPSuccess)
-	end
-	#@db.pushToDB(resp_array)
+#Method used to push the waveData objects to database
+def pushResponse(count)
+     dbAccess = DBAccess.new()
+     responses = query_wave(count)
+     responses.each do |x|
+        dbAccess.persistWaveData(x)
+     end
+end
+
+# test code
+def parse_data()
+js = 
+'{"status":{"success":true},"statistics":{"pagetitle":"The Melbourne School Of Graduate Research - Home","pageurl":"http:\/\/gradresearch.unimelb.edu.au","time":"2.78","allitemcount":78,"totalelements":236,"creditsremaining":"2451","waveurl":"http:\/\/wave.webaim.org\/report?url=http:\/\/gradresearch.unimelb.edu.au"},"categories":{"error":{"description":"Errors","count":1,"items":{"label_missing":{"id":"label_missing","description":"Missing form label","count":1}}},"alert":{"description":"Alerts","count":31,"items":{"alt_duplicate":{"id":"alt_duplicate","description":"A nearby image has the same alternative text","count":2},"heading_skipped":{"id":"heading_skipped","description":"Skipped heading level","count":1},"heading_possible":{"id":"heading_possible","description":"Possible heading","count":1},"link_suspicious":{"id":"link_suspicious","description":"Suspicious link text","count":8},"link_redundant":{"id":"link_redundant","description":"Redundant link","count":17},"title_redundant":{"id":"title_redundant","description":"Redundant title text","count":2}}},"feature":{"description":"Features","count":15,"items":{"alt_null":{"id":"alt_null","description":"Null or empty alternative text","count":8},"alt_link":{"id":"alt_link","description":"Linked image with alternative text","count":7}}},"structure":{"description":"Structural Elements","count":29,"items":{"h1":{"id":"h1","description":"Heading level 1","count":1},"h2":{"id":"h2","description":"Heading level 2","count":13},"h3":{"id":"h3","description":"Heading level 3","count":10},"h5":{"id":"h5","description":"Heading level 5","count":1},"ul":{"id":"ul","description":"Unordered list","count":4}}},"html5":{"description":"HTML5 and ARIA","count":1,"items":{"aria_landmark":{"id":"aria_landmark","description":"ARIA landmark","count":1}}},"contrast":{"description":"Contrast Errors","count":1,"items":{"contrast":{"id":"contrast","description":"Very Low Contrast","count":1}}}}}'
+data = JSON.parse(js)
+if (data["status"]["success"])
+        page_url = data["statistics"]["pageurl"]
+        page_title = data["statistics"]["pagetitle"]
+        wave_url = data["statistics"]["waveurl"]
+        #need to access the  webpage and weburl
+        wv_data = WaveData.new("http://gradresearch.unimelb.edu.au","Graduate Research",page_url,page_title,wave_url)
+        #wv_data.createCategories(data["categories"]["alert"] ["items"],"alert")
+        wv_data.createCategories(data["categories"]["error"]["items"],"error")
+        dbAccess = DBAccess.new()
+        dbAccess.pushWaveData(wv_data)
+else
+    puts "error"
+end
+
+
 end
 
 
