@@ -1,10 +1,10 @@
-  #query_wave.rb
- # Public: Class for querying wave API and push results to db
+ #query_wave.rb
+# Public: Class for querying wave API and push results to db
 #
 # @version: 1.00
 # @author: Nikki Vinayan
 require_relative './parseCsv.rb'
-require_relative './databaseAcess.rb'
+require_relative './databaseAccess.rb'
 require_relative './waveData.rb'
 require 'net/http'
 require '../config/waveApiConfig'
@@ -13,18 +13,19 @@ require 'json'
 class QueryWaveAPI
 
 
-def initialize(file_name,source,report_type=2)
+def initialize(file_name,source,url_count=0,report_type=2)
 	@parser      = ParseCSV.new(file_name,source)
 	@db          = DBAccess.new()
 	@report_type = report_type
+  @url_count   = url_count
 
 end
 
 # generates the formatted url used to access Wave
-def get_urls(count)
-	url_data = @parser.get_urls
+def get_urls()
+	url_data = @parser.get_urls(@url_count)
 	query_urls = Array.new
-	url_data[0..(count-1)].each do |x| 
+	url_data.each do |x| 
   		str = "#{WaveConfig::WAVE_API_URL}key=#{WaveConfig::WAVE_API_KEY}&url=#{x}&reporttype=#{@report_type}" 
     	query_urls.push str
   	end
@@ -33,21 +34,33 @@ end
 
 
 #used to query the Wave API andd converst response to ruby object
-def query_wave(count)
+def query_wave()
 
-	urls = get_urls(count)
+	urls = get_urls()
 	response_array = Array.new
-	urls[0..(count-1)].each do |u|
+  #querying wave
+	urls.each do |u|
     	resp = Net::HTTP.get_response(URI.parse(u))
         if resp.is_a?(Net::HTTPSuccess)
-    	data = JSON.parse(resp.body)
+    	   data = JSON.parse(resp.body)
         	if (data["status"]["success"])    	    
         	  	page_url = data["statistics"]["pageurl"]
-        		page_title = data["statistics"]["pagetitle"]
-        		wave_url = data["statistics"]["waveurl"]
-                wv_data = WaveData.new("http://gradresearch.unimelb.edu.au","Graduate Research",page_url,page_title,wave_url)
-                wv_data.createCategories(data["categories"]["error"]["items"],"error")
-                response_array <<wv_data
+        		  page_title = data["statistics"]["pagetitle"]
+        	 	  wave_url = data["statistics"]["waveurl"]
+              wv_data = WaveData.new("http://gradresearch.unimelb.edu.au","Graduate Research",page_url,page_title,wave_url)
+              error_data = data["categories"]["error"]["items"]
+              if (WaveConfig::ERROR_FLG and !error_data.empty?)
+                wv_data.createCategories(error_data,"error") 
+              end
+              if WaveConfig::ALERT_FLG
+                alert_data = data["categories"]["alert"]["items"]
+                wv_data.createCategories(alert_data,"alert") if !alert_data.empty?
+              end
+              if WaveConfig::STRUCTURE_FLG
+                struct_data = data["categories"]["structure"]["items"]
+                wv_data.createCategories(struct_data,"structure") if !struct_data.empty?
+             end
+              response_array <<wv_data
             else
                puts "Error in Wave Response" 
             end
@@ -55,16 +68,16 @@ def query_wave(count)
     		puts "Invalid HTTP response"
     	end
     end
-    
-    return response_array
+    #persisting to database
+     if !response_array.empty?
+        pushResponse(response_array)
+      end
 end
 
 #Method used to push the waveData objects to database
-def pushResponse(count)
-     dbAccess = DBAccess.new()
-     responses = query_wave(count)
+def pushResponse(responses)
      responses.each do |x|
-        dbAccess.persistWaveData(x)
+        @db.persistWaveData(x)
      end
 end
 
@@ -81,20 +94,10 @@ if (data["status"]["success"])
         wv_data = WaveData.new("http://gradresearch.unimelb.edu.au","Graduate Research",page_url,page_title,wave_url)
         #wv_data.createCategories(data["categories"]["alert"] ["items"],"alert")
         wv_data.createCategories(data["categories"]["error"]["items"],"error")
-        dbAccess = DBAccess.new()
-        dbAccess.pushWaveData(wv_data)
+        @db.pushWaveData(wv_data)
 else
     puts "error"
 end
-
-
 end
-
-
-
-
-
-
-
 
 end

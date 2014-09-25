@@ -63,8 +63,12 @@ class ParseCSV
       puts @arr_of_titles
    end
 
-      def get_urls()
-      @arr_of_urls
+      def get_urls(url_count=0)
+         if (url_count==0) || (@arr_of_urls.length <= url_count)
+            @arr_of_urls
+         else
+            @arr_of_urls.slice(0,url_count)
+         end
    end
 
 end

@@ -1,8 +1,8 @@
 #dataBaseAccess_test_harness.rb
 require './test_helper.rb'
-dbAccess = DBAccess.new
-dbAccess.pushWebsiteToDB()
-dbAccess.pushReportToDB()
-dbAccess.pushPageToDB()
-dbAccess.pushCategoryToDB()
-dbAccess.pushDescriptionToDB()
+db_test = DatabaseTest.new
+db_test.pushWebsiteToDB("http://gradresearch.unimelb.edu.au","The Melbourne School Of Graduate Research - Home")
+db_test.pushReportToDB()
+db_test.pushPageToDB()
+db_test.pushCategoryToDB()
+db_test.pushDescriptionToDB()
