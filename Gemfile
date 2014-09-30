@@ -9,6 +9,7 @@ gem "pg"
 gem "rubygems"
 gem "nokogiri"   
 gem "open-uri"
+gem "haml"
 
  
 group :development do
