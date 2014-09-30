@@ -6,6 +6,9 @@ gem "sqlite3"
 gem "activerecord"
 gem "sinatra-activerecord"
 gem "pg"
+gem "rubygems"
+gem "nokogiri"   
+gem "open-uri"
 
  
 group :development do
