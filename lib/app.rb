@@ -1,9 +1,8 @@
 #app.rb
 require 'sinatra'
 require 'sinatra/activerecord'
-require './config/environments'
 require 'haml'
-
+require_relative './databaseAccess'
 
 #home page of the application
 get '/' do 
@@ -40,6 +39,7 @@ end
 
 # traceroute 
 get '/reportsGen' do 
-	
+  dataB = DBAccess.new
+  @web_array = dataB.getAllReports()
   haml :reportsGen 
 end 

@@ -11,13 +11,13 @@ require 'sinatra/activerecord'
 
 class DatabaseTest
 
-def	initialize()
-end
+	def	initialize()
+	end
 
-
+#inserting data
    def pushWebsiteToDB(web_url,web_name)
 
-   	@website = Website.new(website_url: "http://gradresearch.unimelb.edu.au", website_name: "The Melbourne School Of Graduate Research - Home")
+   	@website = Website.new(website_url: web_url, website_name: web_name)
    	if  @website.save
    		 puts("saved")
 

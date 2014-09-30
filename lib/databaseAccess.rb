@@ -1,12 +1,12 @@
 #databaseAcess.rb
 
 require_relative './models/website.rb'
-require_relative './models/report.rb'
-require_relative './models/page.rb'
-require_relative './models/category.rb'
-require_relative './models/description.rb'
-require '../config/environments'
+require './config/environments'
 require 'sinatra/activerecord'
+require_relative './models/report.rb'
+require_relative  './models/page.rb'
+require_relative './models/category.rb'
+require_relative  './models/description.rb'
 
 
 class DBAccess
@@ -32,6 +32,43 @@ class DBAccess
 
 
 # get list of all websites and their respective report dates
+
+def getAllReports()
+    reports = Report.includes(:website).limit(10)
+    rep_array = Array.new
+    reports.each do |report|
+      rep_display = { 
+        "web_name"    => report.website.website_name,
+        "web_url"     => report.website.website_url,
+        "report_date" => report.report_date,
+        "report_id"   => report.id
+      }
+     rep_array << rep_display
+    end
+    return rep_array
+  end
+
+
+#get the pages for the report_id and all error and alert count associated with the page
+  def getReportDetails(report_id)
+     pages = Page.where("report_id = ? ",report_id)
+     page_array = Array.new
+     pages.each do |pg|
+       error_count = Category.includes(:page).where(page_id: pg.id, category_name: 'error').count
+       alert_count = Category.includes(:page).where(page_id: pg.id, category_name: 'alert').count
+       pg_disply ={
+          "page_name"   => pg.page_title,
+          "page_url"    => pg.page_url,
+          "wave_url"    => pg.wave_url,
+          "error_count" => error_count,
+          "alert_count" => alert_count
+       }
+       page_array << pg_disply
+     end
+    return page_array
+  end
+
+
 
 # def deleteData()
 # end

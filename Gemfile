@@ -6,10 +6,10 @@ gem "sqlite3"
 gem "activerecord"
 gem "sinatra-activerecord"
 gem "pg"
-gem "rubygems"
 gem "nokogiri"   
-gem "open-uri"
+#gem "open-uri"
 gem "haml"
+gem "thinreports"
 
  
 group :development do

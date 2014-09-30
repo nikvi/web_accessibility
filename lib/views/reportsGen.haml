@@ -1,0 +1,15 @@
+%h3 Reports generated:
+%center
+%table{:border => 1,:cellpadding=>5}
+	%tbody
+		%thead
+			%td Report_ID
+			%td Name
+			%td Website
+			%td Created_On
+		- @web_array.each do |row|
+			%tr 
+				%td= row["report_id"]
+				%td= row["web_name"]
+				%td= row["web_url"]
+				%td= row["report_date"]
