@@ -1,0 +1,24 @@
+%h3= "Report no: #{@id}"
+%center
+%table{:border => 1,:cellpadding=>5}
+	%tbody
+		%thead
+			%td Page
+			%td Page_URL
+			%td Error_Count
+			%td Errors
+			%td Alert_Count
+			%td Report
+		- @report_det.each do |row|
+			%tr 
+				%td= row["page_name"]
+				%td
+					%a{ :href  => "#{row["page_url"]}"} "#{row["page_url"]}"
+				%td= row["error_count"]
+				%td
+					%ul
+					-row["errors"].each do |er|
+						%li= er
+				%td= row["alert_count"]
+				%td
+					%a{ :href  => "#{row["wave_url"]}"} "Wave Report"   

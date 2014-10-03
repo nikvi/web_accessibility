@@ -2,5 +2,5 @@
 %form(action='/urlCheck' method='POST') 
   %input(type='text' name='url' value=@url) 
   %input(type='submit') 
-- if defined?(@results) 
-  %pre= @results
+- if defined?(@url) 
+  %p="Your request for #{@url} has been submitted."

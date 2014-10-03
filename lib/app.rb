@@ -4,9 +4,18 @@ require 'sinatra/activerecord'
 require 'haml'
 require_relative './databaseAccess'
 
+
+configure do
+  # logging is enabled by default in classic style applications,
+  # so `enable :logging` is not needed
+  file = File.new("#{settings.root}/log/#{settings.environment}.log", 'a+')
+  file.sync = true
+  use Rack::CommonLogger, file
+end
+
 #home page of the application
 get '/' do 
-  haml :index 
+  haml :index
 end 
   
 # This one shows how you can use refer to 
@@ -26,6 +35,7 @@ end
 
 # form submit page to get the url
 get '/urlCheck' do 
+  logger.warn("submit")
   haml :submitURL 
 end 
 
@@ -35,9 +45,13 @@ post '/urlCheck' do
   haml :submitURL 
 end 
 
+get '/reportDetail/:id' do |id|
+  @id = id
+  @report_det = DBAccess.new.getReportDetails(@id)
+  haml :reportDetail 
+end 
 
 
-# traceroute 
 get '/reportsGen' do 
   dataB = DBAccess.new
   @web_array = dataB.getAllReports()

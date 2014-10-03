@@ -10,6 +10,7 @@
 		- @web_array.each do |row|
 			%tr 
 				%td= row["report_id"]
-				%td= row["web_name"]
+				%td
+					%a{ :href  =>'/reportDetail/'<< "#{row["report_id"]}"} "#{row["web_name"]}"
 				%td= row["web_url"]
 				%td= row["report_date"]
