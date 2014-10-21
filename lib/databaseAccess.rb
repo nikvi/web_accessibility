@@ -1,18 +1,21 @@
 #databaseAcess.rb
 
 require_relative './models/website.rb'
+# when running test Harness --
+#require '../config/environments'
 require './config/environments'
 require 'sinatra/activerecord'
 require_relative './models/report.rb'
 require_relative  './models/page.rb'
 require_relative './models/category.rb'
 require_relative  './models/description.rb'
+require_relative  './models/submit.rb'
 
 
 class DBAccess
 
 	def initialize()
-
+   
 	end
    
    
@@ -30,6 +33,11 @@ class DBAccess
    end
   end
 
+#add the web_urls for which reports need to to be generated
+ def persistURLS(url)
+    time = Time.now
+    submit = Submit.create(web_url: url, submit_date: time.strftime("%Y-%m-%d"))
+ end 
 
 # get list of all websites and their respective report dates
 

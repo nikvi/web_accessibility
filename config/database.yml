@@ -5,3 +5,4 @@ development:
   username: postgres
   password: tiger
   host: localhost
+  pool:5

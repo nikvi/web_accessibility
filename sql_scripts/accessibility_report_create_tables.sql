@@ -31,6 +31,10 @@ CREATE TABLE reports
 	id serial PRIMARY KEY 
 	,report_date TIMESTAMP  NULL 
 	,website_id INTEGER NOT NULL 
+	,pages_total INTEGER NULL
+	,pages_error INTEGER NULL
+	,total_errors INTEGER NULL
+	,total_alerts INTEGER NULL
 );
 
 
@@ -57,7 +61,13 @@ CREATE TABLE categories
 	,description_title VARCHAR(250)  NULL 
 	,count INTEGER  NULL 
 );
-
+-- Create table submit
+CREATE TABLE submits
+(
+	id serial PRIMARY KEY 
+	, web_url  VARCHAR(250) NULL
+	,submit_date TIMESTAMP  NULL
+);
 
 
 -- Create Foreign Key: reports.website_id -> websites.id

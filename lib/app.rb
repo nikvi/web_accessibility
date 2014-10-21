@@ -10,6 +10,7 @@ configure do
   # so `enable :logging` is not needed
   file = File.new("#{settings.root}/log/#{settings.environment}.log", 'a+')
   file.sync = true
+  @@dataBase = DBAccess.new
   use Rack::CommonLogger, file
 end
 
@@ -35,25 +36,27 @@ end
 
 # form submit page to get the url
 get '/urlCheck' do 
-  logger.warn("submit")
+  logger.warn(" in URL submit page")
   haml :submitURL 
 end 
 
 
 post '/urlCheck' do 
   @url = params[:url] 
+  logger.warn("Submitted : " << @url)
+  @@dataBase.persistURLS(@url)
   haml :submitURL 
 end 
 
 get '/reportDetail/:id' do |id|
   @id = id
-  @report_det = DBAccess.new.getReportDetails(@id)
+  @report_det = @@dataBase.getReportDetails(@id)
   haml :reportDetail 
 end 
 
 
 get '/reportsGen' do 
-  dataB = DBAccess.new
-  @web_array = dataB.getAllReports()
+  @web_array = @@dataBase.getAllReports()
   haml :reportsGen 
 end 
+
