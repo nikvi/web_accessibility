@@ -48,9 +48,11 @@ post '/urlCheck' do
   haml :submitURL 
 end 
 
-get '/reportDetail/:id' do |id|
-  @id = id
-  @report_det = @@dataBase.getReportDetails(@id)
+get '/reportDetail/:id/:name' do |id,name|
+  @name = name
+  report = @@dataBase.getReportDetails(id)
+  @report_det = report["pg_data"]
+  @report_sum = report["summary"]
   haml :reportDetail 
 end 
 

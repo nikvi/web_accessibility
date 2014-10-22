@@ -2,6 +2,6 @@
 require './test_helper.rb'
 
 
-queryWave = QueryWaveAPI.new("../data_csv/Graduate Research - Page.csv","siteimprove",8)
+queryWave = QueryWaveAPI.new("../data_csv/Graduate Research - Page.csv","siteimprove",1)
 queryWave.query_wave()
 

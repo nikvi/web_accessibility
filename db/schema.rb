@@ -40,7 +40,16 @@ ActiveRecord::Schema.define(version: 0) do
 
   create_table "reports", force: true do |t|
     t.datetime "report_date"
-    t.integer  "website_id",  null: false
+    t.integer  "website_id",   null: false
+    t.integer  "pages_total"
+    t.integer  "pages_error"
+    t.integer  "total_errors"
+    t.integer  "total_alerts"
+  end
+
+  create_table "submits", force: true do |t|
+    t.string   "web_url",     limit: 250
+    t.datetime "submit_date"
   end
 
   create_table "websites", force: true do |t|

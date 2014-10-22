@@ -3,6 +3,7 @@ development:
   adapter: postgresql
   database: accessibility-reports
   username: postgres
+  encoding: utf8
   password: tiger
   host: localhost
-  pool:5
+  pool: 5

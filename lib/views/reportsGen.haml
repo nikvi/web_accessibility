@@ -11,6 +11,6 @@
 			%tr 
 				%td= row["report_id"]
 				%td
-					%a{ :href  =>'/reportDetail/'<< "#{row["report_id"]}"} "#{row["web_name"]}"
+					%a{ :href  =>'/reportDetail/'<< "#{row["report_id"]}"<<"/#{row["web_name"]}"} "#{row["web_name"]}"
 				%td= row["web_url"]
 				%td= row["report_date"]

@@ -28,9 +28,28 @@ class DBAccess
      @page = @report.pages.find_or_create_by(page_url: wave_data.page_url, page_title: wave_data.page_title, wave_url: wave_data.wave_url)
      if !wave_data.categories.empty?
      wave_data.categories.each do |x|
-       @category = @page.categories.create(category_name: x['c_name'],description_name: x['c_desc_name'],description_title: x['c_desc_title'],count: x['c_count'].to_i)
+       @category = @page.categories.find_or_create_by(category_name: x['c_name'],description_name: x['c_desc_name'],description_title: x['c_desc_title'],count: x['c_count'].to_i)
      end
    end
+    report_sum = generateSummary(@report.id)
+    Report.transaction do
+       @report.pages_total  = report_sum["pg_count"]
+       @report.pages_error  = report_sum["pg_error"]
+       @report.total_errors = report_sum["totl_err"]
+       @report.total_alerts = report_sum["totl_alrt"]
+       @report.save
+    end
+  end
+
+# populate the report table with pages and total error count data:
+
+def generateSummary(id)
+     summary = Hash.new
+     summary["pg_count"]  = Page.where(report_id: id).count
+     summary["pg_error"]  = Page.includes("categories").where(report_id: id, categories:{ category_name: 'error'}).count
+     summary["totl_err"]  = Category.joins(:page).where(category_name: 'error',pages: { report_id: id}).sum('count')
+     summary["totl_alrt"] = Category.joins(:page).where(category_name: 'alert',pages: { report_id: id}).sum('count')
+     return summary
   end
 
 #add the web_urls for which reports need to to be generated
@@ -58,19 +77,23 @@ def getAllReports()
 
 
 #get the pages for the report_id and all error and alert count associated with the page
+#
   def getReportDetails(report_id)
-     pages = Page.where("report_id = ? ",report_id)
-     page_array = Array.new
+     report_data            = Hash.new
+     summary                = getReportSummary(report_id)
+     report_data["summary"] = summary
+     pages                  = Page.where("report_id = ? ",report_id)
+     page_array             = Array.new
      pages.each do |pg|
        #error_count = Category.includes(:page).where(page_id: pg.id, category_name: 'error').count
-       errors = Category.select(:description_name).where(page_id: pg.id, category_name: 'error')
-       error_arr = Array.new
+       errors    = Category.select(:description_name).where(page_id: pg.id, category_name: 'error')
+       error_arr = Set.new
        errors.each do |er|
-        error_arr << er.description_name
+        error_arr.add(er.description_name)
        end
        error_count = error_arr.length
        alert_count = Category.includes(:page).where(page_id: pg.id, category_name: 'alert').count
-       pg_disply ={
+       pg_disply   = {
           "page_name"   => pg.page_title,
           "page_url"    => pg.page_url,
           "wave_url"    => pg.wave_url,
@@ -80,11 +103,21 @@ def getAllReports()
        }
        page_array << pg_disply
      end
-    return page_array
+     report_data["pg_data"] = page_array
+    return report_data
   end
 
 
-
+def getReportSummary(id)
+  data                  = Hash.new
+  report                = Report.find(id)
+  data["pg_totl"]       = report.pages_total
+  data["error_totl"]    = report.total_errors
+  data["error_average"] = (report.total_errors).to_f / report.pages_total
+  data["error_free"]    = report.pages_total - report.pages_error
+  data["alert_average"] = (report.total_alerts).to_f/report.pages_total
+  return data
+end
 # def deleteData()
 # end
 end
