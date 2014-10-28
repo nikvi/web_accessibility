@@ -1,0 +1,10 @@
+%header
+  %h1 Add Report
+%form(action='/urlCheck' method='POST') 
+  %fieldset
+    %div 
+      %label{:for => "url"} Web Site URL
+      %input#url(type='text' name='url' value=@url) 
+    %input(type='submit') 
+- if defined?(@url) 
+  %p="Your request for #{@url} has been submitted."

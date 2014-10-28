@@ -1,0 +1,25 @@
+%header 
+	%h1 Web Accessiblity Reports
+%h2 Reports generated
+%table#reportTable.styled.tablesorter
+	%thead
+		%tr
+			%th Page
+			%th Date
+			%th Total Pages
+			%th Accessible pages
+			%th Errors per page
+	%tbody
+		- @web_array.each do |row|
+			%tr 
+				%td
+					%p
+						%a{ :href  =>'/reportDetail/'<< "#{row["report_id"]}"<<"/#{row["web_name"]}"} #{row["web_name"]}
+						%br
+							= row["web_url"]
+				%td= row["report_date"]				
+				%td= row["pg_totl"]
+				%td= row["error_free"]
+				%td= row["error_aver"]
+%h2
+	%a.button-small(href='/urlCheck') Request a report

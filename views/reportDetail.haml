@@ -1,0 +1,45 @@
+%header
+	%h1= "#{@name}"
+%h2 Report Summary
+%table.styled
+	%thead
+		%tr
+			%th{:scope => "col"} Page Total
+			%th{:scope => "col"} Error Total
+			%th{:scope => "col"} Error Average
+			%th{:scope => "col"} Error Free Pages
+			%th{:scope => "col"} Alert Average
+	%tbody	
+		%tr 
+			%td= "#{@report_sum["pg_totl"]}"
+			%td= "#{@report_sum["error_totl"]}"
+			%td= "#{@report_sum["error_average"]}"
+			%td= "#{@report_sum["error_free"]}"
+			%td= "#{@report_sum["alert_average"]}"
+%h2 Accessibility Report
+%table#reportTable.styled.tablesorter
+	%thead
+		%tr
+			%th{:scope => "col"} Page
+			%th{:scope => "col"} Error Count
+			%th{:scope => "col"} Errors
+			%th{:scope => "col"} Alert Count
+			%th{:scope => "col"} Report
+	%tbody
+		- @report_det.each do |row|
+			%tr 
+				%td
+					%p
+						=row["page_name"] 
+						%br
+							%a{ :href  => "#{row["page_url"]}"} #{row["page_url"]}
+				%td= row["error_count"]
+				%td
+					%ul
+					-row["errors"].each do |er|
+						%li= er
+				%td= row["alert_count"]
+				%td
+					%a{ :href  => "#{row["wave_url"]}"} Wave Report
+
+%p

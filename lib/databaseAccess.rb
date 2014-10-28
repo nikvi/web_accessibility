@@ -64,13 +64,22 @@ def getAllReports()
     reports = Report.includes(:website).limit(10)
     rep_array = Array.new
     reports.each do |report|
+      totl_error = report.total_errors
+      if totl_error.nil?
+        error_avg = 0
+      elsif !(report.pages_total.nil?)
+        error_avg = totl_error.to_f / report.pages_total
+      end
       rep_display = { 
         "web_name"    => report.website.website_name,
         "web_url"     => report.website.website_url,
         "report_date" => report.report_date,
-        "report_id"   => report.id
+        "report_id"   => report.id,
+        "pg_totl"     => report.pages_total.nil? ? 0 : report.pages_total,
+        "error_free"  => (report.pages_total).to_i - (report.pages_error).to_i,
+        "error_aver"  => error_avg
       }
-     rep_array << rep_display
+      rep_array << rep_display
     end
     return rep_array
   end
@@ -112,10 +121,21 @@ def getReportSummary(id)
   data                  = Hash.new
   report                = Report.find(id)
   data["pg_totl"]       = report.pages_total
-  data["error_totl"]    = report.total_errors
-  data["error_average"] = (report.total_errors).to_f / report.pages_total
-  data["error_free"]    = report.pages_total - report.pages_error
-  data["alert_average"] = (report.total_alerts).to_f/report.pages_total
+  tot_err               = report.total_errors
+  tot_alrt              = report.total_alerts
+  if tot_err.nil?
+    data["error_totl"]    = 0
+    data["error_average"] = 0
+  else
+      data["error_totl"]  = tot_err
+      data["error_average"] = tot_err.to_f / report.pages_total
+  end
+  data["error_free"]    = (report.pages_total).to_i - (report.pages_error).to_i
+  if tot_alrt.nil?
+    data["alert_average"] = 0
+  else
+    data["alert_average"] = tot_alrt.to_f/report.pages_total
+  end
   return data
 end
 # def deleteData()

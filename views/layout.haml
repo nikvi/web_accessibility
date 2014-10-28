@@ -1,0 +1,21 @@
+%html 
+	%head 
+		%meta{:charset => "utf-8"}
+		%meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}
+		%meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}
+		%title Web Accessibility Reports
+		%link{:href => "http://uom-design-system.s3.amazonaws.com/v0.4/uom.css", :rel => "stylesheet"}
+		%script{:src => "http://uom-design-system.s3.amazonaws.com/v0.4/uom.js"}
+		-# General
+		%script{ :type => "text/javascript", :src => "/plugins/tablesorter/javascripts/jquery-latest.js"}
+		%script{ :type => "text/javascript", :src => "/javascripts/reports.js"}
+		-#Table Sorter
+		%script{ :type => "text/javascript", :src => "/plugins/tablesorter/javascripts/jquery.tablesorter.js"}
+		%link{:rel => 'stylesheet', :href => '/plugins/tablesorter/stylesheets/jquery.tablesorter.css'}
+	%body 
+		.uomcontent
+			.page-inner
+				.page-local-history
+					%a.root{:href => "/", :title => "Web Accessibility Reports"} Web Accessibility Reports
+				%div{:role => "main"}
+					=yield 
