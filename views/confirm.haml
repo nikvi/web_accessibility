@@ -1,0 +1,12 @@
+%header 
+	%h1 Web Accessiblity Reports
+%h2 Confirm delete
+%form{:action => "/#{id}", :method => "post"}
+	Do you want to delete the following report:
+	= succeed "?" do
+		%em
+			"#{name}"
+	%input{:name => "_method", :type => "hidden", :value => "delete"}
+	%input{:type => "submit", :value => "Yes, Delete It"}
+	\&nbsp    
+	%a.button{:href => "/reportsGen"} Cancel

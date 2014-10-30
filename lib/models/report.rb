@@ -4,6 +4,6 @@ require 'sinatra/activerecord'
 
 
 class  Report < ActiveRecord::Base
-	has_many :pages
+	has_many :pages, :dependent => :destroy
 	belongs_to :website
 end

@@ -15,8 +15,7 @@ end
 
 #home page of the application
 get '/' do 
-  @web_array = @@dataBase.getAllReports()
-  haml :reportsGen
+  redirect to('/reportsGen')
 end 
   
 # This one shows how you can use refer to 
@@ -32,6 +31,16 @@ end
 get '/goodbye/:name' do|name| 
   haml :goodbye, :locals => { :name => name } 
 end 
+
+get '/deleteReport/:id/:name' do |id,name|
+  haml :confirm, :locals => { :name => name, :id => id}
+end
+
+#the delete code is currently commented out
+delete '/:id' do
+  #@@dataBase.delete_report(params[:id])
+  redirect to('/reportsGen')
+end
 
 
 # form submit page to get the url

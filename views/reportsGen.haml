@@ -9,6 +9,7 @@
 			%th Total Pages
 			%th Accessible pages
 			%th Errors per page
+			%th Delete Report
 	%tbody
 		- @web_array.each do |row|
 			%tr 
@@ -21,5 +22,8 @@
 				%td= row["pg_totl"]
 				%td= row["error_free"]
 				%td= row["error_aver"]
+				%td
+					%a.button-small.warning{:href => "/deleteReport/#{row["report_id"]}/#{row["web_name"]}"} Delete
+
 %h2
 	%a.button-small(href='/urlCheck') Request a report
