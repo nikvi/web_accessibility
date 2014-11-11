@@ -10,6 +10,7 @@ gem "nokogiri"
 #gem "open-uri"
 gem "haml"
 gem "thinreports"
+gem "chartkick"
 
  
 group :development do

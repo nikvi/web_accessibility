@@ -1,6 +1,11 @@
 %header
 	%h1= "#{@name}"
 %h2 Report Summary
+%div
+	%h3 Overall
+	= pie_chart(@@web_summary)
+	%h3 Report
+	= pie_chart(@report_error)
 %table.styled
 	%thead
 		%tr
@@ -16,6 +21,7 @@
 			%td= "#{@report_sum["error_average"]}"
 			%td= "#{@report_sum["error_free"]}"
 			%td= "#{@report_sum["alert_average"]}"
+
 %h2 Accessibility Report
 %table#reportTable.styled.tablesorter
 	%thead

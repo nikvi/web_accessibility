@@ -1,6 +1,7 @@
 #app.rb
 require 'sinatra/activerecord'
 require 'haml'
+require 'chartkick'
 require_relative 'lib/databaseAccess'
 
 
@@ -38,7 +39,7 @@ end
 
 #the delete code is currently commented out
 delete '/:id' do
-  #@@dataBase.delete_report(params[:id])
+  @@dataBase.delete_report(params[:id])
   redirect to('/reportsGen')
 end
 
@@ -62,12 +63,15 @@ get '/reportDetail/:id/:name' do |id,name|
   report = @@dataBase.getReportDetails(id)
   @report_det = report["pg_data"]
   @report_sum = report["summary"]
+  @report_error = report["errors"]
   haml :reportDetail 
 end 
 
 
-get '/reportsGen' do 
-  @web_array = @@dataBase.getAllReports()
+get '/reportsGen' do
+  reports = @@dataBase.getAllReports() 
+  @web_array = reports["rep_data"]
+  @@web_summary = reports["rep_errors"]
   haml :reportsGen 
 end 
 

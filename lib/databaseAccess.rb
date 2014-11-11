@@ -1,8 +1,7 @@
 #databaseAcess.rb
 
 require_relative './models/website.rb'
-# when running test Harness --
-#require '../config/environments'
+# when running test Harness , commnet out--
 require './config/environments'
 require 'sinatra/activerecord'
 require_relative './models/report.rb'
@@ -62,6 +61,11 @@ def generateSummary(id)
 
 def getAllReports()
     reports = Report.includes(:website).limit(10)
+    report_error = Category.select("description_name as error_name, sum(count) as total_errors").where(category_name: 'error').group("description_name");
+    error_sum = Hash.new
+    report_error.each do |ech_err|
+      error_sum[ech_err.error_name] = ech_err.total_errors
+    end
     rep_array = Array.new
     reports.each do |report|
       totl_error = report.total_errors
@@ -81,7 +85,8 @@ def getAllReports()
       }
       rep_array << rep_display
     end
-    return rep_array
+    puts error_sum
+    return  {"rep_data" => rep_array,"rep_errors" => error_sum}
   end
 
 
@@ -90,6 +95,7 @@ def getAllReports()
   def getReportDetails(report_id)
      report_data            = Hash.new
      summary                = getReportSummary(report_id)
+     report_data["errors"]  = getErrorDetails(report_id)
      report_data["summary"] = summary
      pages                  = Page.where("report_id = ? ",report_id)
      page_array             = Array.new
@@ -115,7 +121,7 @@ def getAllReports()
     return report_data
   end
 
-
+#returns the data required for the summary of the report
 def getReportSummary(id)
   data                  = Hash.new
   report                = Report.find(id)
@@ -137,6 +143,21 @@ def getReportSummary(id)
   end
   return data
 end
+
+#returns the data to display the error breakdown piechart
+def getErrorDetails(id)
+    error_det = Hash.new
+    errors    = Category.joins("JOIN pages ON categories.page_id = pages.id")
+                           .select("description_name as error_name, sum(count) as total_errors").where(category_name: 'error','pages.report_id' => id).group("description_name");
+    errors.each do |err|
+      error_det[err.error_name]  = err.total_errors
+    end
+    return error_det
+end
+
+
+
+
 
  def delete_report(id)
    report = Report.find(id)

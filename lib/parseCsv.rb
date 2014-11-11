@@ -19,6 +19,8 @@ class ParseCSV
       # declare the names of the column arrays
       @arr_of_titles = []
       @arr_of_urls = []
+      @site_addr
+      @site_name
       parse_file
    end
 
@@ -40,17 +42,26 @@ class ParseCSV
       contents = File.read(@csv_filename)
       output_encoding = @csv_encoding + ":UTF-8"
       arr_csv_contents = CSV.read(@csv_filename, { :encoding => output_encoding, :headers => true, :col_sep => column_seperator, :skip_blanks => true })
-
-      arr_csv_contents.each { |row| 
+      if @csv_source == "siteimprove"
+         @site_name = "Graduate Research"
+         @site_addr = "http://gradresearch.unimelb.edu.au"
+         arr_csv_contents.each { |row| 
          @arr_of_titles << row[0]
          @arr_of_urls << row[1]
-      } 
-
-      if @csv_source == "siteimprove"
+          } 
          # delete the first two rows of the array
          @arr_of_titles = @arr_of_titles.drop(2)
          @arr_of_urls = @arr_of_urls.drop(2) 
+      elsif @csv_source == "google" 
+         @site_name = "Varied-Sample"
+         @site_addr = "http://www.unimelb.edu.au/"
+         arr_csv_contents.each { |row| 
+         @arr_of_titles << row[0]
+         @arr_of_urls << row[7]
+          } 
       end
+
+
    end
 
    # Public: returns the encoding of CSV file
@@ -64,11 +75,13 @@ class ParseCSV
    end
 
       def get_urls(url_count=0)
+
          if (url_count==0) || (@arr_of_urls.length <= url_count)
-            @arr_of_urls
+            dt = @arr_of_urls
          else
-            @arr_of_urls.slice(0,url_count)
+            dt = @arr_of_urls.slice(0,url_count)
          end
+         return {"array" => dt, "website" => @site_name, "ip" => @site_addr}
    end
 
 end

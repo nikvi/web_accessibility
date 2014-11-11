@@ -1,5 +1,8 @@
 %header 
 	%h1 Web Accessiblity Reports
+%h2 Error Summary
+%div
+	= pie_chart(@@web_summary)
 %h2 Reports generated
 %table#reportTable.styled.tablesorter
 	%thead
@@ -24,6 +27,5 @@
 				%td= row["error_aver"]
 				%td
 					%a.button-small.warning{:href => "/deleteReport/#{row["report_id"]}/#{row["web_name"]}"} Delete
-
 %h2
 	%a.button-small(href='/urlCheck') Request a report
