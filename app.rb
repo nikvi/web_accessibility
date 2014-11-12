@@ -19,19 +19,6 @@ get '/' do
   redirect to('/reportsGen')
 end 
   
-# This one shows how you can use refer to 
-# variables in your Haml views. 
-# This method uses member variables. 
-get '/hello/:name' do|name| 
-  @name = name 
-  haml :hello 
-end 
-  
-# This method shows you how to inject 
-# local variables 
-get '/goodbye/:name' do|name| 
-  haml :goodbye, :locals => { :name => name } 
-end 
 
 get '/deleteReport/:id/:name' do |id,name|
   haml :confirm, :locals => { :name => name, :id => id}
