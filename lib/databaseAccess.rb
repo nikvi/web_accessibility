@@ -43,18 +43,18 @@ class DBAccess
 # populate the report table with pages and total error count data:
 
 def generateSummary(id)
-     summary = Hash.new
-     summary["pg_count"]  = Page.where(report_id: id).count
-     summary["pg_error"]  = Page.includes("categories").where(report_id: id, categories:{ category_name: 'error'}).count
-     summary["totl_err"]  = Category.joins(:page).where(category_name: 'error',pages: { report_id: id}).sum('count')
-     summary["totl_alrt"] = Category.joins(:page).where(category_name: 'alert',pages: { report_id: id}).sum('count')
-     return summary
+     summary = {
+     "pg_count" =>  Page.where(report_id: id).count,
+     "pg_error" =>  Page.includes("categories").where(report_id: id, categories:{ category_name: 'error'}).count,
+     "totl_err" =>  Category.joins(:page).where(category_name: 'error',pages: { report_id: id}).sum('count'),
+     "totl_alrt" => Category.joins(:page).where(category_name: 'alert',pages: { report_id: id}).sum('count')
+    }
   end
 
 #add the web_urls for which reports need to to be generated
- def persistURLS(url)
+ def persistURLS(url,rName)
     time = Time.now
-    submit = Submit.create(web_url: url, submit_date: time.strftime("%Y-%m-%d"))
+    submit = Submit.create(web_url: url,report_name: rName, submit_date: time.strftime("%Y-%m-%d"))
  end 
 
 # get list of all websites and their respective report dates
@@ -77,7 +77,7 @@ def getAllReports()
       rep_display = { 
         "web_name"    => report.website.website_name,
         "web_url"     => report.website.website_url,
-        "report_date" => report.report_date,
+        "report_date" => report.report_date.strftime("%d %B, %Y"),
         "report_id"   => report.id,
         "pg_totl"     => report.pages_total.nil? ? 0 : report.pages_total,
         "error_free"  => (report.pages_total).to_i - (report.pages_error).to_i,

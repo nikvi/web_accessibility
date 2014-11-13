@@ -48,7 +48,8 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   create_table "submits", force: true do |t|
-    t.string   "web_url",     limit: 250
+    t.string   "web_url",     limit: 250, null: false
+    t.string   "report_name", limit: 250
     t.datetime "submit_date"
   end
 

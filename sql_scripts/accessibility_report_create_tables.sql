@@ -65,7 +65,8 @@ CREATE TABLE categories
 CREATE TABLE submits
 (
 	id serial PRIMARY KEY 
-	, web_url  VARCHAR(250) NULL
+	, web_url  VARCHAR(250)  NOT NULL
+	, report_name  VARCHAR(250)  NULL 
 	,submit_date TIMESTAMP  NULL
 );
 

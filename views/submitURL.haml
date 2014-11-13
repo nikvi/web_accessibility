@@ -1,10 +1,12 @@
 %header
-  %h1 Add Report
+	%h1 Add Report
 %form(action='/urlCheck' method='POST') 
-  %fieldset
-    %div 
-      %label{:for => "url"} Web Site URL
-      %input#url(type='text' name='url' value=@url) 
-    %input(type='submit') 
+	%fieldset
+		%div
+			%label{:for => "rName"} Report Name:
+			%input#url(type='text' name='rName' value=@rName) 
+			%label{:for => "url"} Web Site URL:
+			%input#url(type='text' name='url' value=@url) 
+		%input(type='submit') 
 - if defined?(@url) 
-  %p="Your request for #{@url} has been submitted."
+	%p="Your request for #{@url} has been submitted."

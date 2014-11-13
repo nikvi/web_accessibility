@@ -40,19 +40,28 @@ end
 
 post '/urlCheck' do 
   @url = params[:url] 
+  @rName = params[:rName]
   logger.warn("Submitted : " << @url)
-  @@dataBase.persistURLS(@url)
+  @@dataBase.persistURLS(@url,@rName)
   haml :submitURL 
 end 
 
 get '/reportDetail/:id/:name' do |id,name|
-  @name = name
-  report = @@dataBase.getReportDetails(id)
+  report      = @@dataBase.getReportDetails(id)
+  @tot_data   = Hash[@@web_summary.sort]
   @report_det = report["pg_data"]
   @report_sum = report["summary"]
-  @report_error = report["errors"]
-  haml :reportDetail 
+  @report_err = get_hash_diff(report["errors"],@tot_data)
+  haml :reportDetail,:locals => { :name => name}
 end 
+
+# add the extra keys from report_smmary and provide value of zero
+def get_hash_diff(report_data,overall_data)
+  overall_data.each_key { |key| 
+    report_data[key] = 0 unless report_data.has_key?(key)
+  }
+  return Hash[report_data.sort]
+end
 
 
 get '/reportsGen' do

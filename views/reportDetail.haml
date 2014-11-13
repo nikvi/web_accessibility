@@ -1,11 +1,14 @@
 %header
-	%h1= "#{@name}"
+	%h1= "#{name}"
 %h2 Report Summary
 %div
-	%h3 Overall
-	= pie_chart(@@web_summary)
-	%h3 Report
-	= pie_chart(@report_error)
+	%span#space{:style => "width: 500px; display: inline-block"}
+	%span#piechart_before{:style => "width: 450px; display: inline-block"}
+		%b  Overall
+		= pie_chart(@tot_data)
+	%span#piechart_after{:style => "width: 450px; display: inline-block"}
+		%b Report
+		= pie_chart(@report_err)
 %table.styled
 	%thead
 		%tr
