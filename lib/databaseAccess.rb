@@ -2,7 +2,7 @@
 
 require_relative './models/website.rb'
 # when running test Harness , commnet out--
-require './config/environments'
+#require './config/environments'
 require 'sinatra/activerecord'
 require_relative './models/report.rb'
 require_relative  './models/page.rb'
