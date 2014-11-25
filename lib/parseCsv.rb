@@ -53,11 +53,12 @@ class ParseCSV
          @arr_of_titles = @arr_of_titles.drop(2)
          @arr_of_urls = @arr_of_urls.drop(2) 
       elsif @csv_source == "google" 
-         @site_name = "Grainger Museum"
-         @site_addr = "http://library.unimelb.edu.au/grainger"
+         #@site_name = "Grainger Museum"
+         @site_name = "Varied-Sample"
+         @site_addr = "http://www.unimelb.edu.au/"
          arr_csv_contents.each { |row| 
          @arr_of_titles << row[0]
-         @arr_of_urls << row[1]
+         @arr_of_urls << row[7] #1 for grainger
           } 
       end
 

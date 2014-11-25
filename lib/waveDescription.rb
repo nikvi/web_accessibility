@@ -5,6 +5,7 @@
 # @author: Andrew Normand
 require_relative './databaseAccess.rb'
 require_relative '../lib/models/description.rb'
+require './config/environments'
 require 'json'
 require 'open-uri'
 

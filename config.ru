@@ -6,6 +6,8 @@ require "bundler/setup"
 
 require "sinatra"
 
+require "seed_dump"
+
 require "haml"
 
 require "./app"

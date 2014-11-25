@@ -1,8 +1,6 @@
 #dbConfig.rb
 Sinatra::Base.configure :development, :production do 
     enable :logging
-    #dbconfig = YAML.load(File.read("config/database.yml")).with_indifferent_access
-    # running test harness 
     db = URI.parse(ENV['DATABASE_URL'] || 'postgres://localhost/mydb')
  
 	ActiveRecord::Base.establish_connection(
@@ -13,6 +11,7 @@ Sinatra::Base.configure :development, :production do
 			:database => db.path[1..-1],
 			:encoding => 'utf8'
 	)
+	# running test harness 
     #dbconfig = YAML.load(File.read("../config/database.yml")).with_indifferent_access
     #set :database, dbconfig[settings.environment]
     #ActiveRecord::Base.establish_connection dbconfig[settings.environment]
