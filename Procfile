@@ -1,1 +1,1 @@
-web: bundle exec rackup config.ru -p $PORT
+unicorn -p $PORT -c ./config/unicorn.rb
