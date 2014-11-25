@@ -10,6 +10,7 @@ gem "nokogiri"
 gem "haml"
 gem "chartkick"
 
+
 group :development do
   gem "shotgun"
   gem "tux"
