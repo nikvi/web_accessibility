@@ -14,7 +14,7 @@
 ActiveRecord::Schema.define(version: 0) do
 
   # These are extensions that must be enabled in order to support this database
-  #enable_extension "plpgsql"
+  enable_extension "plpgsql"
 
   create_table "categories", force: true do |t|
     t.integer "page_id",                       null: false
