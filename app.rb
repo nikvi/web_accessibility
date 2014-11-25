@@ -8,10 +8,10 @@ require_relative 'lib/databaseAccess'
 configure do
   # logging is enabled by default in classic style applications,
   # so `enable :logging` is not needed
-  file = File.new("#{settings.root}/lib/log/#{settings.environment}.log", 'a+')
-  file.sync = true
+  #file = File.new("#{settings.root}/lib/log/#{settings.environment}.log", 'a+')
+  #@file.sync = true
   @@dataBase = DBAccess.new
-  use Rack::CommonLogger, file
+  #use Rack::CommonLogger, file
 end
 
 #home page of the application
