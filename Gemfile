@@ -10,8 +10,6 @@ gem "nokogiri"
 gem "haml"
 gem "chartkick"
 gem "seed_dump"
-gem 'rails', '> 4.1.4'
-gem 'rake'
 
 
 group :development do

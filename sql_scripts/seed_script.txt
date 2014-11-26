@@ -1,0 +1,4 @@
+SeedDump.dump(Category, file: 'db/seeds.rb')
+SeedDump.dump(Page, file: 'db/seeds.rb', append: true)
+SeedDump.dump(Report, file: 'db/seeds.rb', append: true)
+SeedDump.dump(Website, file: 'db/seeds.rb', append: true)
