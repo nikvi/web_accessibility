@@ -3,6 +3,7 @@ require 'sinatra/activerecord'
 require 'haml'
 require 'chartkick'
 require_relative 'lib/databaseAccess'
+require_relative 'lib/runReports'
 
 
 configure do
@@ -38,13 +39,21 @@ get '/urlCheck' do
 end 
 
 
+get '/runReports'  do
+ rp = RunReports.new
+ rp.run_reports_web
+ haml :reportRun
+end
+
+
 post '/urlCheck' do 
-  @url = params[:url] 
-  @rName = params[:rName]
+  @url    = params[:rurl] 
+  @rpName = params[:rname]
+  @p_urls = params[:rmessage]
   logger.warn("Submitted : " << @url)
-  @@dataBase.persistURLS(@url,@rName)
+  @@dataBase.persistURLS(@url,@rpName,@p_urls)
   haml :submitURL 
-end 
+end
 
 get '/reportDetail/:id/:name' do |id,name|
   report      = @@dataBase.getReportDetails(id)

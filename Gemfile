@@ -10,6 +10,7 @@ gem "nokogiri"
 gem "haml"
 gem "chartkick"
 gem "seed_dump"
+gem "rake"
 
 
 group :development do

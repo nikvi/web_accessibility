@@ -3,10 +3,12 @@
 %form(action='/urlCheck' method='POST') 
 	%fieldset
 		%div
-			%label{:for => "rName"} Report Name:
-			%input#url(type='text' name='rName' value=@rName) 
-			%label{:for => "url"} Web Site URL:
-			%input#url(type='text' name='url' value=@url) 
+			%label{:for => "rname"} Report Name:
+			%input#url(type='text' name='rname' value=@rName) 
+			%label{:for => "rurl"} Main Website:
+			%input#url(type='text' name='rurl' value=@url)
+			%label{:for => "rmessage"} Page URLs:
+			%textarea{"data-required" => "",:name => "rmessage", :title => "Please enter the URLS."}
 		%input(type='submit') 
 - if defined?(@url) 
 	%p="Your request for #{@url} has been submitted."

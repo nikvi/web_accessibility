@@ -67,6 +67,7 @@ CREATE TABLE submits
 	id serial PRIMARY KEY 
 	, web_url  VARCHAR(250)  NOT NULL
 	, report_name  VARCHAR(250)  NULL 
+	, pg_urls TEXT NULL
 	,submit_date TIMESTAMP  NULL
 );
 

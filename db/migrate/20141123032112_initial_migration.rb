@@ -36,6 +36,7 @@ class InitialMigration < ActiveRecord::Migration
   create_table "submits", force: true do |t|
     t.string   "web_url",     limit: 250, null: false
     t.string   "report_name", limit: 250
+    t.text     "pg_urls"
     t.datetime "submit_date"
   end
 

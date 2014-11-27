@@ -52,9 +52,10 @@ def generateSummary(id)
   end
 
 #add the web_urls for which reports need to to be generated
- def persistURLS(url,rName)
+ def persistURLS(url,rName,pg_urls)
+    page_value = pg_urls.gsub(/[\r\t\n]+/,",")
     time = Time.now
-    submit = Submit.create(web_url: url,report_name: rName, submit_date: time.strftime("%Y-%m-%d"))
+    submit = Submit.create(web_url: url,report_name: rName,pg_urls: page_value,submit_date: time.strftime("%Y-%m-%d"))
  end 
 
 # get list of all websites and their respective report dates
@@ -153,6 +154,23 @@ def getErrorDetails(id)
       error_det[err.error_name]  = err.total_errors
     end
     return error_det
+end
+
+def get_requested_urls()
+  report_data = Array.new
+  ActiveRecord::Base.transaction do
+  submits = Submit.where(report_run: 'false')
+  submits.each do |rep|
+    report_req  = {
+      "website" => rep.report_name,
+      "ip"      => rep.web_url,
+      "array"   => (rep.pg_urls).split(',')
+    }
+    report_data << report_req
+    rep.update_attributes(report_run: 'true')
+  end 
+end
+ return report_data
 end
 
 
