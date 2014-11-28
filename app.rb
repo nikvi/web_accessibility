@@ -38,10 +38,11 @@ get '/urlCheck' do
   haml :submitURL 
 end 
 
-
+#method to retrieve all the requests for reports
 get '/runReports'  do
- rp = RunReports.new
- rp.run_reports_web
+ #rp = RunReports.new
+ #rp.run_reports_web
+ @report_req = @@dataBase.getReportRequests()
  haml :reportRun
 end
 

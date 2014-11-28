@@ -43,7 +43,8 @@ def query_wave(url_data)
              end
               response_array <<wv_data
             else
-               puts "Error in Wave Response" 
+               puts "Error in Wave Response"
+               puts JSON.parse(resp.body)
             end
         else
     		puts "Invalid HTTP response"

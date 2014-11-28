@@ -173,7 +173,20 @@ end
  return report_data
 end
 
-
+#get all requested reports
+def getReportRequests()
+  rep_req = Submit.where(report_run: 'false')
+  request = Array.new
+  rep_req.each do |req|
+    rep_req = {
+      "report_name" => req.report_name,
+      "url"         => req.web_url,
+      "submit_date" => req.submit_date.strftime("%d %B, %Y")
+    }
+  request << rep_req  
+  end
+ return request
+end
 
 
 
