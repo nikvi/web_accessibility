@@ -1,14 +1,21 @@
 %header
 	%h1 Add Report
-%form(action='/urlCheck' method='POST') 
+%form#reportForm{:action =>'/urlCheck',"data-validate"=>"", :method => "post"}
 	%fieldset
 		%div
-			%label{:for => "rname"} Report Name:
-			%input#url(type='text' name='rname' value=@rName) 
-			%label{:for => "rurl"} Main Website:
-			%input#url(type='text' name='rurl' value=@url)
-			%label{:for => "rmessage"} Page URLs:
-			%textarea{"data-required" => "",:name => "rmessage", :title => "Please enter the URLS."}
-		%input(type='submit') 
-- if defined?(@url) 
-	%p="Your request for #{@url} has been submitted."
+			%label 
+				Report Name:
+				%input#rName{:type =>'text',"data-required" => "",:name =>'rname',:value => @rName,:title => "Please enter the report name."}/
+		%div
+			%label 
+				Main Website:
+				%input#rurl{:type =>'text',:name =>'rurl',:value =>@url,"data-required" => ""}/
+		%div
+			%label 
+				Email:
+				%input#rEmail{"data-pattern" => "email",:type => "email",:name =>'rEmail',:value => @rEmail,:title => "Please enter a valid email."}/
+		%div
+			%label 
+				Page URLs:
+				%textarea{"data-required" => "",:name => "rmessage", :title => "Please enter the URLS."}
+		%input{:type =>'submit'}/

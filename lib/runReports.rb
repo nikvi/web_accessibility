@@ -8,7 +8,7 @@ require_relative  './models/submit.rb'
 
 class RunReports
 # generates the formatted url used to access Wave
-def format_url_data(data)
+def self.format_url_data(data)
 	query_urls = Array.new
 	data["array"].each do |x| 
     	str = "#{WaveConfig::WAVE_API_URL}key=#{WaveConfig::WAVE_API_KEY}&url=#{x}&reporttype=#{WaveConfig::REPORT_TYPE}" 
@@ -32,7 +32,7 @@ end
   	#end	
 #end
 
-def run_report_db(rep_id)
+def RunReports.run_report_db(rep_id)
 	ActiveRecord::Base.transaction do
 		 qv = QueryWaveAPI.new
 		 rep = Submit.find(rep_id)
@@ -41,7 +41,7 @@ def run_report_db(rep_id)
 	      "ip"      => rep.web_url,
 	      "array"   => (rep.pg_urls).split(',')
 	    }
-	    qv.query_wave(format_url_data(dt))
+	    qv.query_wave(format_url_data(report_req))
 	    rep.update_attributes(report_run: 'true')
 	end
 end

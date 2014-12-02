@@ -4,6 +4,7 @@ require 'haml'
 require 'chartkick'
 require_relative 'lib/databaseAccess'
 require_relative 'lib/runReports'
+require_relative 'lib/jobs/report_job'
 
 
 configure do
@@ -46,14 +47,24 @@ get '/runReports'  do
  haml :reportRun
 end
 
+#creates a worker thread and runs the report asynchrnously
+
+get  '/runReports/:id' do
+  data = params[:id]
+  #ReportJob.new.async.perform(params[:id])
+  #SuckerPunch::Queue[:report_queue].async.perform(data)
+  redirect to('/runReports')
+end
+
 
 post '/urlCheck' do 
   @url    = params[:rurl] 
   @rpName = params[:rname]
+  @rEmail = params[:rEmail]
   @p_urls = params[:rmessage]
   logger.warn("Submitted : " << @url)
-  @@dataBase.persistURLS(@url,@rpName,@p_urls)
-  haml :submitURL 
+  @@dataBase.persistURLS(@url,@rpName,@p_urls,@rEmail)
+  haml :confirm_report
 end
 
 get '/reportDetail/:id/:name' do |id,name|

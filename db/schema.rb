@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 0) do
   enable_extension "plpgsql"
 
   create_table "categories", force: true do |t|
-    t.integer "page_id", null: false
+    t.integer "page_id",                       null: false
     t.string  "category_name",     limit: 250
     t.string  "description_name",  limit: 250
     t.string  "description_title", limit: 250
@@ -47,12 +47,13 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer  "total_alerts"
   end
 
-  create_table "submits_data", force: true do |t|
+  create_table "submits", force: true do |t|
     t.string   "web_url",     limit: 250, null: false
     t.string   "report_name", limit: 250
     t.text     "pg_urls"
     t.datetime "submit_date"
-    t.boolean  "report_run", default: false
+    t.boolean  "report_run",  default: false
+    t.string   "email_id",    limit: 250
   end
 
   create_table "websites", force: true do |t|

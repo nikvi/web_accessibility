@@ -52,10 +52,10 @@ def generateSummary(id)
   end
 
 #add the web_urls for which reports need to to be generated
- def persistURLS(url,rName,pg_urls)
+ def persistURLS(url,rName,pg_urls,rEmail)
     page_value = pg_urls.gsub(/[\r\t\n]+/,",")
     time = Time.now
-    submit = Submit.create(web_url: url,report_name: rName,pg_urls: page_value,submit_date: time.strftime("%Y-%m-%d"))
+    submit = Submit.create(web_url: url,report_name: rName,pg_urls: page_value,submit_date: time.strftime("%Y-%m-%d"),email_id: rEmail)
  end 
 
 # get list of all websites and their respective report dates
@@ -179,6 +179,7 @@ def getReportRequests()
   request = Array.new
   rep_req.each do |req|
     rep_req = {
+      "id"          => req.id,
       "report_name" => req.report_name,
       "url"         => req.web_url,
       "submit_date" => req.submit_date.strftime("%d %B, %Y")
