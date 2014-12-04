@@ -1,94 +1,106 @@
-#app.rb
-require 'sinatra/activerecord'
-require 'haml'
-require 'chartkick'
-require_relative 'lib/databaseAccess'
-require_relative 'lib/runReports'
-require_relative 'lib/jobs/report_job'
+  #app.rb
+  require 'sinatra/activerecord'
+  require 'haml'
+  require 'chartkick'
+  require 'logger'
+  require_relative 'lib/databaseAccess'
+  require_relative 'lib/runReports'
+  require_relative 'lib/jobs/report_job'
 
 
-configure do
-  # logging is enabled by default in classic style applications,
-  # so `enable :logging` is not needed
-  #file = File.new("#{settings.root}/lib/log/#{settings.environment}.log", 'a+')
-  #@file.sync = true
-  @@dataBase = DBAccess.new
-  #use Rack::CommonLogger, file
-end
 
-#home page of the application
-get '/' do 
-  redirect to('/reportsGen')
-end 
-  
+   ::Logger.class_eval { alias :write :'<<' }
+    access_log = ::File.join(::File.dirname(::File.expand_path(__FILE__)),'log','access.log')
+    access_logger = ::Logger.new(access_log)
+    error_logger = ::File.new(::File.join(::File.dirname(::File.expand_path(__FILE__)),'log','error.log'),"a+")
 
-get '/deleteReport/:id/:name' do |id,name|
-  haml :confirm, :locals => { :name => name, :id => id}
-end
+  configure do
+    # logging is enabled by default in classic style applications,
+    # so `enable :logging` is not needed
+    #file = File.new("#{settings.root}/lib/log/#{settings.environment}.log", 'a+')
+    #@file.sync = true
+    #use Rack::CommonLogger,file
+    use ::Rack::CommonLogger, access_logger
+    @@dataBase = DBAccess.new
+  end
 
-#the delete code is currently commented out
-delete '/:id' do
-  @@dataBase.delete_report(params[:id])
-  redirect to('/reportsGen')
-end
+   before {
+      env["rack.errors"] =  error_logger
+    }  
 
+  #home page of the application
+  get '/' do 
+    redirect to('/reportsGen')
+  end 
+    
 
-# form submit page to get the url
-get '/urlCheck' do 
-  logger.warn(" in URL submit page")
-  haml :submitURL 
-end 
+  get '/deleteReport/:id/:name' do |id,name|
+    haml :confirm, :locals => { :name => name, :id => id}
+  end
 
-#method to retrieve all the requests for reports
-get '/runReports'  do
- #rp = RunReports.new
- #rp.run_reports_web
- @report_req = @@dataBase.getReportRequests()
- haml :reportRun
-end
-
-#creates a worker thread and runs the report asynchrnously
-
-get  '/runReports/:id' do
-  data = params[:id]
-  #ReportJob.new.async.perform(params[:id])
-  #SuckerPunch::Queue[:report_queue].async.perform(data)
-  redirect to('/runReports')
-end
+  #the delete code is currently commented out
+  delete '/:id' do
+    @@dataBase.delete_report(params[:id])
+    redirect to('/reportsGen')
+  end
 
 
-post '/urlCheck' do 
-  @url    = params[:rurl] 
-  @rpName = params[:rname]
-  @rEmail = params[:rEmail]
-  @p_urls = params[:rmessage]
-  logger.warn("Submitted : " << @url)
-  @@dataBase.persistURLS(@url,@rpName,@p_urls,@rEmail)
-  haml :confirm_report
-end
+  # form submit page to get the url
+  get '/urlCheck' do 
+    logger.warn(" in URL submit page")
+    haml :submitURL 
+  end 
 
-get '/reportDetail/:id/:name' do |id,name|
-  report      = @@dataBase.getReportDetails(id)
-  @tot_data   = Hash[@@web_summary.sort]
-  @report_det = report["pg_data"]
-  @report_sum = report["summary"]
-  @report_err = get_hash_diff(report["errors"],@tot_data)
-  haml :reportDetail,:locals => { :name => name}
-end 
+  #method to retrieve all the requests for reports
+  get '/runReports'  do
+   #rp = RunReports.new
+   #rp.run_reports_web
+   @report_req = @@dataBase.getReportRequests()
+   haml :reportRun
+  end
 
-# add the extra keys from report_smmary and provide value of zero
-def get_hash_diff(report_data,overall_data)
-  overall_data.each_key { |key| 
-    report_data[key] = 0 unless report_data.has_key?(key)
-  }
-  return Hash[report_data.sort]
-end
+  #creates a worker thread and runs the report asynchrnously
+
+  get  '/runReports/:id' do
+    data = params[:id]
+    ReportJob.new.async.perform(data)
+    #SuckerPunch::Queue[:report_queue].async.perform(data)
+    redirect to('/runReports')
+  end
 
 
-get '/reportsGen' do
-  reports = @@dataBase.getAllReports() 
-  @web_array = reports["rep_data"]
-  @@web_summary = reports["rep_errors"]
-  haml :reportsGen 
-end 
+  post '/urlCheck' do 
+    @url    = params[:rurl] 
+    @rpName = params[:rname]
+    @rEmail = params[:rEmail]
+    @p_urls = params[:rmessage]
+    logger.warn("Submitted : " << @url)
+    @@dataBase.persistURLS(@url,@rpName,@p_urls,@rEmail)
+    haml :confirm_report
+  end
+
+  get '/reportDetail/:id/:name' do |id,name|
+    report      = @@dataBase.getReportDetails(id)
+    @tot_data   = Hash[@@web_summary.sort]
+    @report_det = report["pg_data"]
+    @report_sum = report["summary"]
+    @report_err = get_hash_diff(report["errors"],@tot_data)
+    haml :reportDetail,:locals => { :name => name}
+  end 
+
+  # add the extra keys from report_smmary and provide value of zero
+  def get_hash_diff(report_data,overall_data)
+    overall_data.each_key { |key| 
+      report_data[key] = 0 unless report_data.has_key?(key)
+    }
+    return Hash[report_data.sort]
+  end
+
+
+  get '/reportsGen' do
+    reports = @@dataBase.getAllReports() 
+    @web_array = reports["rep_data"]
+    @@web_summary = reports["rep_errors"]
+    haml :reportsGen 
+  end 
 

@@ -1,0 +1,5 @@
+127.0.0.1 - - [04/Dec/2014 12:42:20] "GET / HTTP/1.1" 302 - 0.0540
+127.0.0.1 - - [04/Dec/2014 12:42:21] "GET /reportsGen HTTP/1.1" 200 6222 0.2960
+127.0.0.1 - - [04/Dec/2014 12:42:21] "GET /javascripts/reports.js HTTP/1.1" 404 459 0.0740
+127.0.0.1 - - [04/Dec/2014 12:42:28] "GET /reportDetail/6/04_Sample_Data HTTP/1.1" 200 11123 0.2140
+127.0.0.1 - - [04/Dec/2014 12:42:28] "GET /javascripts/reports.js HTTP/1.1" 404 459 0.0250
