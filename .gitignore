@@ -3,3 +3,4 @@ sample_data
 config/database.yml
 config/waveApiConfig.rb
 data_csv
+log
