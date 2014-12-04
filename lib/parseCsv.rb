@@ -61,8 +61,6 @@ class ParseCSV
          @arr_of_urls << row[7] #1 for grainger
           } 
       end
-
-
    end
 
    # Public: returns the encoding of CSV file
@@ -75,14 +73,13 @@ class ParseCSV
       puts @arr_of_titles
    end
 
-      def get_urls(url_count=0)
-
-         if (url_count==0) || (@arr_of_urls.length <= url_count)
-            dt = @arr_of_urls
-         else
-            dt = @arr_of_urls.slice(0,url_count)
-         end
-         return {"array" => dt, "website" => @site_name, "ip" => @site_addr}
+   def get_urls(url_count=0)
+      if (url_count==0) || (@arr_of_urls.length <= url_count)
+         dt = @arr_of_urls
+      else
+         dt = @arr_of_urls.slice(0,url_count)
+      end
+      return {"array" => dt, "website" => @site_name, "ip" => @site_addr}
    end
 
 end

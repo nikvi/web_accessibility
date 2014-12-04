@@ -68,10 +68,10 @@ CREATE TABLE submits
 	, web_url  VARCHAR(250)  NOT NULL
 	, report_name  VARCHAR(250)  NULL 
 	, pg_urls TEXT NULL
+	, email_id VARCHAR(250)  NULL 
 	,submit_date TIMESTAMP  NULL
+	,report_run_status VARCHAR(25) NOT NULL
 );
-
-
 -- Create Foreign Key: reports.website_id -> websites.id
 ALTER TABLE reports ADD CONSTRAINT FK_reports_website_id_websites_id FOREIGN KEY (website_id) REFERENCES websites(id);
 
@@ -81,6 +81,8 @@ ALTER TABLE pages ADD CONSTRAINT FK_pages_report_id_reports_id FOREIGN KEY (repo
 -- Create Foreign Key: categories.page_id -> pages.id
 ALTER TABLE categories ADD CONSTRAINT FK_categories_page_id_pages_id FOREIGN KEY (page_id) REFERENCES pages(id);
 
+-- Created enum for report request status
+#CREATE TYPE REPORT_STATUS AS ENUM ('submit', 'running', 'complete','fail');
 
 
 

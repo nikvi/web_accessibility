@@ -12,6 +12,8 @@ gem "chartkick"
 gem "seed_dump"
 gem "rake"
 gem "sucker_punch"
+gem "pony",'~> 1.11'
+gem "mime-types",'~> 2.4.3'
 
 group :development do
   gem "shotgun"

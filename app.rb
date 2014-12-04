@@ -33,7 +33,6 @@
     redirect to('/reportsGen')
   end 
     
-
   get '/deleteReport/:id/:name' do |id,name|
     haml :confirm, :locals => { :name => name, :id => id}
   end
@@ -52,23 +51,20 @@
   end 
 
   #method to retrieve all the requests for reports
-  get '/runReports'  do
-   #rp = RunReports.new
-   #rp.run_reports_web
+  get '/requestedReports'  do
    @report_req = @@dataBase.getReportRequests()
    haml :reportRun
   end
 
   #creates a worker thread and runs the report asynchrnously
-
-  get  '/runReports/:id' do
-    data = params[:id]
-    ReportJob.new.async.perform(data)
-    #SuckerPunch::Queue[:report_queue].async.perform(data)
-    redirect to('/runReports')
+  #updates status to running
+  get '/requestedReports/:id' do |id|
+    #ReportJob.new.async.perform(id)
+    @@dataBase.updateReqReportStatus(id)
+    redirect to('/requestedReports')
   end
 
-
+  #submit  report request for a provided set of urls
   post '/urlCheck' do 
     @url    = params[:rurl] 
     @rpName = params[:rname]

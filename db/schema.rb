@@ -48,12 +48,12 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   create_table "submits", force: true do |t|
-    t.string   "web_url",     limit: 250, null: false
-    t.string   "report_name", limit: 250
+    t.string   "web_url",           limit: 250, null: false
+    t.string   "report_name",       limit: 250
     t.text     "pg_urls"
+    t.string   "email_id",          limit: 250
     t.datetime "submit_date"
-    t.boolean  "report_run",  default: false
-    t.string   "email_id",    limit: 250
+    t.string   "report_run_status", limit: 25,  null: false
   end
 
   create_table "websites", force: true do |t|

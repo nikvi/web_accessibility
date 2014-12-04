@@ -17,4 +17,9 @@
 							%a{:href  => "#{row["url"]}"} #{row["url"]}
 				%td= row["submit_date"]
 				%td
-					%a.button-small{:href => "/runReports/#{row["id"]}"}  Run
+					- if row["status"]=="submit"
+						%a.button-small{:href => "/requestedReports/#{row["id"]}"}  Run
+					- else
+						%a.button-small.soft.disabled Running
+
+					
