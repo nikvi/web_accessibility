@@ -2,7 +2,7 @@
 
 require "rubygems"
 
-require "./views/test.haml"
+
 
 require "bundler/setup"
 
