@@ -18,11 +18,12 @@ set :run, false
 
 set :raise_errors, true
 
+haml_template = File.read(File.join(settings.views, 'test.haml'))
 configure :production do
   Pony.options = {
       :via => :smtp,
       :via_options => {
-      	:html_body => (haml :test),
+      	:html_body => Haml::Engine.new(haml_template).render(binding),
         :address => 'smtp.sendgrid.net',
         :port => '587',
         :domain => 'heroku.com',
