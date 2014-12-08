@@ -16,7 +16,7 @@ set :run, false
 
 set :raise_errors, true
 
-configure :development do
+configure :production do
   Pony.options = {
       :via => :smtp,
       :via_options => {
