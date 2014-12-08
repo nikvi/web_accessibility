@@ -47,7 +47,7 @@ class RunReports
 		    rep.update_attributes(report_run_status: 'complete')   
 		end
 		#begin
-			Pony.mail(:to => @email_add, :subject => 'Web Accessiblity Report', :body => "The accessiblity report has been generated.", :from => 'web_accessiblity@unimelb.edu.au')
+			Pony.mail(:to => @email_add, :subject => 'Web Accessiblity Report', :from => 'web_accessiblity@unimelb.edu.au')
 		#rescue
 			#puts "Unable to send email for report: " <<  rep_id
 		#end
