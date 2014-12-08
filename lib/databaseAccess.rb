@@ -77,7 +77,7 @@ class DBAccess
           "report_id"   => report.id,
           "pg_totl"     => report.pages_total.nil? ? 0 : report.pages_total,
           "error_free"  => (report.pages_total).to_i - (report.pages_error).to_i,
-          "error_aver"  => error_avg.round(3)
+          "error_aver"  => error_avg.round(2)
         }
         rep_array << rep_display
       end
@@ -129,7 +129,7 @@ class DBAccess
         data["error_average"] = 0
       else
         data["error_totl"]    = tot_err
-        data["error_average"] = tot_err.to_f / report.pages_total
+        data["error_average"] = (tot_err.to_f / report.pages_total).round(2)
       end
 
       data["error_free"]     = (report.pages_total).to_i - (report.pages_error).to_i
@@ -137,7 +137,7 @@ class DBAccess
       if tot_alrt.nil?
         data["alert_average"] = 0
       else
-        data["alert_average"] = tot_alrt.to_f/report.pages_total
+        data["alert_average"] = (tot_alrt.to_f/report.pages_total).round(2)
       end
 
       return data
