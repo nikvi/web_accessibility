@@ -15,11 +15,12 @@ gem "sucker_punch"
 gem "pony",'~> 1.11'
 gem "mime-types",'~> 2.4.3'
 
+
 group :development do
   gem "shotgun"
   gem "tux"
 end
 
 group :production do
-  #gem "unicorn"
+  gem "unicorn"
 end
