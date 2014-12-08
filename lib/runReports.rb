@@ -37,20 +37,20 @@ class RunReports
 		ActiveRecord::Base.transaction do
 			 qv = QueryWaveAPI.new
 			 rep = Submit.find(rep_id)
-			 report_req  = {
+			 @report_req  = {
 		      "website" => rep.report_name,
 		      "ip"      => rep.web_url,
+		      "email_id"   => rep.email_id,
 		      "array"   => (rep.pg_urls).split(',')
 		    }
-		    @email_add = rep.email_id
-		    qv.query_wave(format_url_data(report_req))
+		    qv.query_wave(format_url_data(@report_req))
 		    rep.update_attributes(report_run_status: 'complete')   
 		end
-		#begin
-			Pony.mail(:to => @email_add, :subject => 'Web Accessiblity Report', :from => 'web_accessiblity@unimelb.edu.au')
-		#rescue
-			#puts "Unable to send email for report: " <<  rep_id
-		#end
+		begin
+			Pony.mail(:to => @report_req.email_id, :subject => 'Web Accessiblity Report:'<< @report_req.website, :body => "The accessiblity report for " << @report_req.website<<" has been generated.", :from => 'web_accessiblity@unimelb.edu.au')
+		rescue
+			puts "Unable to send email for report: " <<  rep_id
+		end
 	end
 
 end
