@@ -20,7 +20,7 @@
     #file = File.new("#{settings.root}/lib/log/#{settings.environment}.log", 'a+')
     #@file.sync = true
     #use Rack::CommonLogger,file
-    use ::Rack::CommonLogger, access_logger
+    #use ::Rack::CommonLogger, access_logger
     @@dataBase = DBAccess.new
   end
 
