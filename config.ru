@@ -2,6 +2,8 @@
 
 require "rubygems"
 
+require "./views/test.haml"
+
 require "bundler/setup"
 
 require "sinatra"
@@ -20,6 +22,7 @@ configure :production do
   Pony.options = {
       :via => :smtp,
       :via_options => {
+      	:html_body => (haml :test),
         :address => 'smtp.sendgrid.net',
         :port => '587',
         :domain => 'heroku.com',
