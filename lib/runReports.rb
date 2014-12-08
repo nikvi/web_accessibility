@@ -46,11 +46,11 @@ class RunReports
 		    qv.query_wave(format_url_data(report_req))
 		    rep.update_attributes(report_run_status: 'complete')   
 		end
-		begin
+		#begin
 			Pony.mail(:to => @email_add, :subject => 'Web Accessiblity Report', :body => "The accessiblity report has been generated.", :from => 'web_accessiblity@unimelb.edu.au')
-		rescue
-			puts "Unable to send email for report: " <<  rep_id
-		end
+		#rescue
+			#puts "Unable to send email for report: " <<  rep_id
+		#end
 	end
 
 end

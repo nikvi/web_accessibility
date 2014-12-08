@@ -18,7 +18,7 @@ set :run, false
 
 set :raise_errors, true
 
-haml_template = File.read(File.join(settings.views, 'test.haml'))
+haml_template = File.read(File.join('views', 'test.haml'))
 configure :production do
   Pony.options = {
       :via => :smtp,
