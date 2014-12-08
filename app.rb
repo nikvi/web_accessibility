@@ -24,9 +24,9 @@
     @@dataBase = DBAccess.new
   end
 
-   before {
-      env["rack.errors"] =  error_logger
-    }  
+   #before {
+     # env["rack.errors"] =  error_logger
+    #}  
 
   #home page of the application
   get '/' do 
