@@ -42,8 +42,14 @@ class RunReports
 		      "ip"      => rep.web_url,
 		      "array"   => (rep.pg_urls).split(',')
 		    }
+		    @email_add = rep.email_id
 		    qv.query_wave(format_url_data(report_req))
-		    rep.update_attributes(report_run_status: 'complete')
+		    rep.update_attributes(report_run_status: 'complete')   
+		end
+		begin
+			Pony.mail(:to => @email_add, :subject => 'Web Accessiblity Report', :body => "Report has been generated.")
+		rescue
+			puts "Unable to send email for report: " <<  rep_id
 		end
 	end
 

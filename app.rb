@@ -59,7 +59,7 @@
   #creates a worker thread and runs the report asynchrnously
   #updates status to running
   get '/requestedReports/:id' do |id|
-    #ReportJob.new.async.perform(id)
+    ReportJob.new.async.perform(id)
     @@dataBase.updateReqReportStatus(id)
     redirect to('/requestedReports')
   end

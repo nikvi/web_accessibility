@@ -41,7 +41,7 @@ class InitialMigration < ActiveRecord::Migration
       t.datetime "submit_date"
       t.string   "report_run_status", limit: 25,  null: false
     end
-    
+      
     create_table "websites", force: true do |t|
       t.string "website_url",  limit: 250
       t.string "website_name", limit: 250
