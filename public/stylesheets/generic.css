@@ -2,3 +2,33 @@ a.disabled {
    pointer-events: none;
    cursor: default;
 }
+
+#reportsorter thead tr span{
+  cursor: pointer;
+  background-image: url(../images/bg.gif); 
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  padding-right: 20px;
+}
+
+#reportsorter thead tr th.headerSortUp span{
+  background-image: url(../images/asc.gif);
+}
+#reportsorter thead tr th.headerSortDown span{
+  background-image: url(../images/desc.gif);
+}
+
+#reportsorter table, th ,td {
+	border: 1px solid #e0e0e0;
+	padding-right: 1.25rem;
+	padding-left: 1.25rem;
+}
+
+table#reportsorter {
+	border-collapse: collapse;
+
+}
+
+td.nowrap {
+	white-space: nowrap;
+}

@@ -7,17 +7,16 @@
 		%link{:href => "https://uom-design-system.s3.amazonaws.com/v0.4/uom.css", :rel => "stylesheet"}
 		%script{:src => "https://uom-design-system.s3.amazonaws.com/v0.4/uom.js"}
 		-# General
-		%script{ :type => "text/javascript", :src => "/plugins/tablesorter/javascripts/jquery-latest.js"}
-		%script{ :type => "text/javascript", :src => "/javascripts/reports.js"}
 		%link{:rel => 'stylesheet', :href => '/stylesheets/generic.css'}
 		-#Validation
 		%script{ :type => "text/javascript", :src => "/javascripts/jquery-1.11.1.min.js"}
-		-#Chatkick
+		-# Sorting
+		%script{ :type => "text/javascript", :src => "/javascripts/jquery.tablesorter.min.js"}
+		%script{ :type => "text/javascript", :src => "/javascripts/jquery.metadata.js"}
+		%script{ :type => "text/javascript", :src => "/javascripts/tableSorter.js"}
+		-#Chartkick
 		%script{:src => "https://www.google.com/jsapi"}
 		%script{:src => "/javascripts/chartkick.js"}	
-		-#Table Sorter
-		%script{ :type => "text/javascript", :src => "/plugins/tablesorter/javascripts/jquery.tablesorter.js"}
-		%link{:rel => 'stylesheet', :href => '/plugins/tablesorter/stylesheets/jquery.tablesorter.css'}
 	%body 
 		.uomcontent
 			.page-inner

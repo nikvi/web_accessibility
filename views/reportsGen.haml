@@ -4,15 +4,21 @@
 %div
 	= pie_chart(@@web_summary)
 %h2 Reports generated
-%table#reportTable.styled.tablesorter
+%table#reportsorter.wide.center
 	%thead
 		%tr
-			%th Page
-			%th Date
-			%th Total Pages
-			%th Accessible pages
-			%th Errors per page
-			%th Delete Report
+			%th{:scope => "col"} 
+				%span Report
+			%th{:class => "{sorter: 'usLongDate'}",:scope => "col"}
+				%span Date
+			%th{:scope => "col"} 
+				%span Total Pages
+			%th{:scope => "col"} 
+				%span Accessible pages
+			%th{:scope => "col"} 
+				%span  Errors per page
+			%th{:scope => "col"} 
+				Delete Report
 	%tbody
 		- @web_array.each do |row|
 			%tr 
@@ -21,7 +27,7 @@
 						%a{ :href  =>'/reportDetail/'<< "#{row["report_id"]}"<<"/#{row["web_name"]}"} #{row["web_name"]}
 						%br
 							= row["web_url"]
-				%td= row["report_date"]				
+				%td.nowrap= row["report_date"]				
 				%td= row["pg_totl"]
 				%td= row["error_free"]
 				%td= row["error_aver"]
@@ -29,4 +35,5 @@
 					%a.button-small.warning{:href => "/deleteReport/#{row["report_id"]}/#{row["web_name"]}"} Delete
 %h2
 	%a.button-small(href='/urlCheck')   Request a report
+	\&nbsp
 	%a.button-small(href='/requestedReports') Requested Reports

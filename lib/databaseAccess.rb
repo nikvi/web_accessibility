@@ -73,7 +73,7 @@ class DBAccess
         rep_display = { 
           "web_name"    => report.website.website_name,
           "web_url"     => report.website.website_url,
-          "report_date" => report.report_date.strftime("%d %B, %Y"),
+          "report_date" => report.report_date.strftime("%d %b, %Y"),
           "report_id"   => report.id,
           "pg_totl"     => report.pages_total.nil? ? 0 : report.pages_total,
           "error_free"  => (report.pages_total).to_i - (report.pages_error).to_i,

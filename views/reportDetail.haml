@@ -9,7 +9,7 @@
 	%span#piechart_after{:style => "width: 450px; display: inline-block"}
 		%b Report
 		= pie_chart(@report_err)
-%table.styled
+%table.styled.center
 	%thead
 		%tr
 			%th{:scope => "col"} Page Total
@@ -26,7 +26,7 @@
 			%td= "#{@report_sum["alert_average"]}"
 
 %h2 Accessibility Report
-%table#reportTable.styled.tablesorter
+%table.styled
 	%thead
 		%tr
 			%th{:scope => "col"} Page
@@ -43,7 +43,7 @@
 						%br
 							%a{ :href  => "#{row["page_url"]}"} #{row["page_url"]}
 				%td= row["error_count"]
-				%td
+				%td.nowrap
 					%ul
 					-row["errors"].each do |er|
 						%li= er
