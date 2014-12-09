@@ -55,14 +55,13 @@ class DBAccess
 
   # get list of all websites and their respective report dates
     def getAllReports()
-      reports      = Report.includes(:website).limit(10)
+      reports      = Report.includes(:website)
       report_error = Category.select("description_name as error_name, sum(count) as total_errors").where(category_name: 'error').group("description_name");
       error_sum    = Hash.new
       report_error.each do |ech_err|
         error_sum[ech_err.error_name] = ech_err.total_errors
       end
       rep_array     = Array.new
-
       reports.each do |report|
         totl_error  = report.total_errors
         if totl_error.nil?

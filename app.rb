@@ -94,8 +94,9 @@
 
 
   get '/reportsGen' do
-    reports = @@dataBase.getAllReports() 
-    @web_array = reports["rep_data"]
+    reports       = @@dataBase.getAllReports() 
+    @web_array    = reports["rep_data"]
+    @rep_num      = reports["rep_data"].length
     @@web_summary = reports["rep_errors"]
     haml :reportsGen 
   end 
