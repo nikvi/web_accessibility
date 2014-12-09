@@ -66,12 +66,12 @@
 
   #submit  report request for a provided set of urls
   post '/urlCheck' do 
-    @url    = params[:rurl] 
-    @rpName = params[:rname]
-    @rEmail = params[:rEmail]
+    @url   = params[:rurl]
     @p_urls = params[:rmessage]
+    #remove spaces
+    @p_urls.strip!
     logger.warn("Submitted : " << @url)
-    @@dataBase.persistURLS(@url,@rpName,@p_urls,@rEmail)
+    @@dataBase.persistURLS(@url,params[:rname],@p_urls,params[:rEmail])
     haml :confirm_report
   end
 
@@ -96,7 +96,6 @@
   get '/reportsGen' do
     reports       = @@dataBase.getAllReports() 
     @web_array    = reports["rep_data"]
-    @rep_num      = reports["rep_data"].length
     @@web_summary = reports["rep_errors"]
     haml :reportsGen 
   end 
