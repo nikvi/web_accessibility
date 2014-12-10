@@ -4,6 +4,8 @@
 %div
 	= pie_chart(@@web_summary)
 %h2 Reports generated
+%div#paginate
+	= will_paginate @web_array
 %table#reportsorter.wide.center
 	%thead
 		%tr

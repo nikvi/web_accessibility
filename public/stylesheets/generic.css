@@ -19,16 +19,22 @@ a.disabled {
 }
 
 #reportsorter table, th ,td {
-	border: 1px solid #e0e0e0;
-	padding-right: 1.25rem;
-	padding-left: 1.25rem;
+  border: 1px solid #e0e0e0;
+  padding-right: 1.25rem;
+  padding-left: 1.25rem;
 }
 
 table#reportsorter {
-	border-collapse: collapse;
+  border-collapse: collapse;
 
 }
 
 td.nowrap {
-	white-space: nowrap;
+  white-space: nowrap;
+}
+
+#paginate {
+display: block;
+position: relative;
+left: 65%;
 }

@@ -14,6 +14,7 @@ gem "rake"
 gem "sucker_punch"
 gem "pony",'~> 1.11'
 gem "mime-types",'~> 2.4.3'
+gem "will_paginate",'~> 3.0.5'
 
 
 group :development do

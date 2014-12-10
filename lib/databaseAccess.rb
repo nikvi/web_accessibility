@@ -10,7 +10,6 @@
   require_relative  './models/description.rb'
   require_relative  './models/submit.rb'
 
-
 class DBAccess
 
   # the incoming json data is stored in DB

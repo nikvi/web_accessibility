@@ -3,9 +3,13 @@
   require 'haml'
   require 'chartkick'
   require 'logger'
+  require 'will_paginate'
+  require 'will_paginate/active_record'
   require_relative 'lib/databaseAccess'
   require_relative 'lib/runReports'
   require_relative 'lib/jobs/report_job'
+  require_relative 'config/initializers/will_paginate_array'
+  #Dir.glob('./config/initializers/*.rb', &method(:require))
 
 
 
@@ -94,9 +98,11 @@
 
 
   get '/reportsGen' do
-    reports       = @@dataBase.getAllReports() 
-    @web_array    = reports["rep_data"]
-    @@web_summary = reports["rep_errors"]
+    if  @reports.nil? || @reports.empty?
+     @reports       = @@dataBase.getAllReports()
+    end
+    @web_array    = @reports["rep_data"].paginate(params[:page], 10)
+    @@web_summary = @reports["rep_errors"]
     haml :reportsGen 
-  end 
+  end
 
