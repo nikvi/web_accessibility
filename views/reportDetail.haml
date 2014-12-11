@@ -2,12 +2,12 @@
 	%h1= "#{name}"
 %h2 Report Summary
 %div
-	%span#space{:style => "width: 500px; display: inline-block"}
-	%span#piechart_before{:style => "width: 450px; display: inline-block"}
-		%b  Overall
+	%span#pie_space{:style => "display: inline-block;padding-left:20%"}
+	%span#piechart_before{:style => "width: 650px; display: inline-block;text-align: center"}
+		%b Overall
 		= pie_chart(@tot_data)
-	%span#piechart_after{:style => "width: 450px; display: inline-block"}
-		%b Report
+	%span#piechart_after{:style => "width: 650px; display: inline-block;text-align: center"}
+		%b.center Report
 		= pie_chart(@report_err)
 %table.styled.center
 	%thead
