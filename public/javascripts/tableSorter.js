@@ -1,6 +1,12 @@
 /* table.js */
 $(document).ready(function() { 
-    $("#reportsorter").tablesorter({
-    headers: { 5: { sorter: false }}
-    }); 
+	$('#sortable').DataTable( {
+  		"searching": false,
+  		"lengthChange": false,
+  		"order": [[ 3, "desc" ]],
+  		"columnDefs": [ {
+      			"targets": 5,
+      			"orderable": false
+         } ]
+	});
 });

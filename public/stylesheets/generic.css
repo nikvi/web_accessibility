@@ -3,22 +3,7 @@ a.disabled {
    cursor: default;
 }
 
-#reportsorter thead tr span{
-  cursor: pointer;
-  background-image: url(../images/bg.gif); 
-  background-repeat: no-repeat;
-  background-position: 100% 100%;
-  padding-right: 20px;
-}
-
-#reportsorter thead tr th.headerSortUp span{
-  background-image: url(../images/asc.gif);
-}
-#reportsorter thead tr th.headerSortDown span{
-  background-image: url(../images/desc.gif);
-}
-
-#reportsorter table, th ,td {
+table, th ,td {
   border: 1px solid #e0e0e0;
   padding-right: 1.25rem;
   padding-left: 1.25rem;
@@ -33,8 +18,38 @@ td.nowrap {
   white-space: nowrap;
 }
 
+span#pie_space {
+  display: inline-block;
+  padding-left:20%;
+}
+
+span#piechart_before { 
+  width: 35%;
+  display: inline-block;
+  text-align: center;
+  margin:0 auto; 
+  position: relative;
+}
+
+span#piechart_after{
+  width: 35%;
+  display: inline-block;
+  text-align: center;
+  margin:0 auto;
+  position: relative;
+  right: 5%;
+}
+
 #paginate {
 display: block;
 position: relative;
 left: 65%;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+color: #333;
+padding-right: 28%;
+}
+.dataTables_wrapper .dataTables_info{
+padding-left: 28%;
 }
