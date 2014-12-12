@@ -15,7 +15,7 @@ class RunReports
 	    	str = "#{WaveConfig::WAVE_API_URL}key=#{WaveConfig::WAVE_API_KEY}&url=#{x}&reporttype=#{WaveConfig::REPORT_TYPE}" 
 	    	query_urls.push str
 	  	end
-		return {"urls" => query_urls, "name" => data["website"], "site" => data["ip"] }
+		return {"urls" => query_urls, "name" => data["rep_name"], "submit_id" => data["submit_id"] }
 	end
 
 	def run_reports_csv(file_name,source,url_count=5)
@@ -38,14 +38,14 @@ class RunReports
 			 qv  = QueryWaveAPI.new
 			 rep = Submit.find(rep_id)
 			 @report_req  = {
-		      "website"   => rep.report_name,
-		      "ip"        => rep.web_url,
+			 "submit_id"  => rep.id,
+		      "rep_name"  => rep.report_name,
 		      "email_id"  => rep.email_id,
 		      "array"     => (rep.pg_urls).split(',')
 		    }
 		    qv.query_wave(format_url_data(@report_req))
 		    begin
-				Pony.mail(:to => @report_req["email_id"], :subject => "Web Accessiblity Report: #{@report_req["website"]} ", :body => "The accessiblity report for #{@report_req["website"]} has been generated.", :from => 'web_accessiblity@unimelb.edu.au')
+				Pony.mail(:to => @report_req["email_id"], :subject => "Web Accessiblity Report: #{@report_req["rep_name"]} ", :body => "The accessiblity report for #{@report_req["rep_name"]} has been generated.", :from => 'web_accessiblity@unimelb.edu.au')
 		    	rep.update_attributes(report_run_status: 'complete')
 		    rescue
 				puts "Unable to send email for report: #{rep_id}"

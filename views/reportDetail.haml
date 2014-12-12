@@ -50,5 +50,8 @@
 				%td= row["alert_count"]
 				%td
 					%a{ :href  => "#{row["wave_url"]}"} Wave Report
+%h2
+	%a.button-small.warning{:href => "/deleteReport/#{id}/#{name}"} Delete
+	\&nbsp
+	%a.button-small{:href => "/rerunReport/#{id}"} Rerun Report
 
-%p

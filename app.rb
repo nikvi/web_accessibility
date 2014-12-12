@@ -38,6 +38,11 @@
     haml :confirm, :locals => { :name => name, :id => id}
   end
 
+  get '/rerunReport/:id' do
+    @@dataBase.rerun_report(params[:id])
+    haml :confirm_report
+  end
+
   #the delete code is currently commented out
   delete '/:id' do
     @@dataBase.delete_report(params[:id])
@@ -82,7 +87,7 @@
     @report_det = report["pg_data"]
     @report_sum = report["summary"]
     @report_err = get_hash_diff(report["errors"],@tot_data)
-    haml :reportDetail,:locals => { :name => name}
+    haml :reportDetail,:locals => { :name => name ,:id => id}
   end 
 
   # add the extra keys from report_smmary and provide value of zero

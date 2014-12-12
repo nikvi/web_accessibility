@@ -19,6 +19,8 @@
 				%td
 					- if row["status"]=="submit"
 						%a.button-small{:href => "/requestedReports/#{row["id"]}"}  Run
+					-elsif row["status"]=="rerun"
+						%a.button-small{:href => "/requestedReports/#{row["id"]}"}  Rerun
 					- else
 						%a.button-small.soft.disabled Running
 

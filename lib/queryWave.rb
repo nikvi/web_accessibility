@@ -28,7 +28,7 @@ class QueryWaveAPI
             page_url   = data["statistics"]["pageurl"]
       		  page_title = data["statistics"]["pagetitle"]
       	 	  wave_url   = data["statistics"]["waveurl"]
-            wv_data    = WaveData.new(url_data["site"],url_data["name"],page_url,page_title,wave_url)
+            wv_data    = WaveData.new(url_data["submit_id"],page_url,page_title,wave_url)
             error_data = data["categories"]["error"]["items"]
             if (WaveConfig::ERROR_FLG and !error_data.empty?)
               wv_data.createCategories(error_data,"error") 

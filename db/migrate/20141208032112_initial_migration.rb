@@ -1,4 +1,3 @@
-#20141204032112_initial_migration.rb
 class InitialMigration < ActiveRecord::Migration
   def change
   	enable_extension "plpgsql"
@@ -27,7 +26,7 @@ class InitialMigration < ActiveRecord::Migration
 
     create_table "reports", force: true do |t|
       t.datetime "report_date"
-      t.integer  "submit_id",   null: false
+      t.integer  "website_id",   null: false
       t.integer  "pages_total"
       t.integer  "pages_error"
       t.integer  "total_errors"

@@ -5,11 +5,10 @@
 # @author: Nikki Vinaya
 class WaveData
 
-	attr_reader  :website_url, :website_name, :page_url, :wave_url, :page_title, :categories
+	attr_reader  :submit_id, :report_name, :page_url, :wave_url, :page_title, :categories 
 
-	def initialize(web_url,web_name,page_url,page_title,wave_url,categories=Array.new())
-		@website_url  = web_url
-		@website_name = web_name
+	def initialize(submit_id,page_url,page_title,wave_url,categories=Array.new())
+		@submit_id  = submit_id
 		@page_url     = page_url
 	    @page_title   = page_title
 	    @wave_url     = wave_url

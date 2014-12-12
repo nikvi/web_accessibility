@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer  "pages_error"
     t.integer  "total_errors"
     t.integer  "total_alerts"
+    t.decimal  "error_avg"
   end
 
   create_table "submits", force: true do |t|

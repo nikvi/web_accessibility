@@ -3,7 +3,7 @@
 DROP TABLE categories;
 DROP TABLE pages;
 DROP TABLE reports;
-DROP TABLE websites;
+DROP TABLE submits;
 DROP TABLE descriptions;
 
 --Delete Tables
@@ -12,4 +12,4 @@ DROP TABLE descriptions;
 delete from public.categories;
 delete from public.pages;
 delete from public.reports;
-delete from public.websites;
+delete from public.submits;

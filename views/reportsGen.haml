@@ -7,6 +7,8 @@
 %table#sortable.wide.center
 	%thead
 		%tr
+			%th{:scope => "col"}
+				%span Rank
 			%th{:scope => "col"} 
 				%span Report
 			%th{:class => "{sorter: 'usLongDate'}",:scope => "col"}
@@ -17,22 +19,20 @@
 				%span Accessible pages
 			%th{:scope => "col"} 
 				%span  Errors per page
-			%th{:scope => "col"} 
-				Delete Report
 	%tbody
 		- @web_array.each do |row|
 			%tr 
+				%td= row["rank"]
 				%td
 					%p
-						%a{ :href  =>'/reportDetail/'<< "#{row["report_id"]}"<<"/#{row["web_name"]}"} #{row["web_name"]}
+						%a{ :href  =>'/reportDetail/'<< "#{row["report_id"]}"<<"/#{row["rep_name"]}"} #{row["rep_name"]}
 						%br
 							= row["web_url"]
 				%td.nowrap= row["report_date"]				
 				%td= row["pg_totl"]
 				%td= row["error_free"]
 				%td= row["error_aver"]
-				%td
-					%a.button-small.warning{:href => "/deleteReport/#{row["report_id"]}/#{row["web_name"]}"} Delete
+				
 %h2{:style => "position: relative; right: 4%;"}
 	%a.button-small(href='/urlCheck')   Request a report
 	\&nbsp
