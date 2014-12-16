@@ -13,9 +13,9 @@ class DBAccess
   # the incoming json data is stored in DB
     def persistWaveData(wave_data)
        time     = Time.now
-       @submit = Submit.find(wave_data.submit_id)
+       @submit =  Submit.find(wave_data.submit_id)
        #currently only storing data as multiple vlaues getting created
-       @report  = @submit.reports.find_or_create_by(report_date: time.strftime("%Y-%m-%d") )
+       @report  = @submit.reports.find_or_create_by(report_date: time.strftime("%Y-%m-%d"))
        @page    = @report.pages.find_or_create_by(page_url: wave_data.page_url, page_title: wave_data.page_title, wave_url: wave_data.wave_url)
 
       if !wave_data.categories.empty?
@@ -32,7 +32,16 @@ class DBAccess
          @report.error_avg    = report_sum["error_avg"]
          @report.save
       end
+      cleanupOldData(@report.id,@submit.id)
     end
+
+  #delete the pages and categories data for earlier reports:
+  def cleanupOldData(report_id,submit_id)
+     report_ids = Report.where(submit_id:submit_id).where.not(id: report_id).select("id")
+    unless report_ids.nil? || report_ids.length==0
+      Page.destroy_all(["report_id in (?)", report_ids])
+    end
+  end
 
   #populate the report table with pages and total error count data:
     def generateSummary(id)
@@ -43,7 +52,7 @@ class DBAccess
         if totl_error.nil?
           error_avg = 0
         elsif !(pages_total.nil?)
-          error_avg = totl_error.to_f / pages_total
+          error_avg = (totl_error.to_f / pages_total).round(2)
         end
        summary = {
        "pg_count"  =>  pages_total,
@@ -64,7 +73,13 @@ class DBAccess
 
   # get list of all websites and their respective report dates
     def getAllReports()
-      reports      = Report.includes(:submit).order('error_avg ASC','pages_error ASC','total_errors ASC','total_alerts ASC', 'report_date DESC')
+      #reports      = Report.includes(:submit).order('error_avg ASC','pages_error ASC','total_errors ASC','total_alerts ASC', 'report_date DESC')
+      reports        = Report.find_by_sql("select u.* from  
+                         (select submit_id, 
+                          max(report_date) as MaxCreated from 
+                          reports group by submit_id
+                          ) mu inner join reports u on mu.submit_id = u.submit_id and mu.MaxCreated = u.report_date 
+                          order by u.error_avg, u.pages_error, u.total_errors, u.total_alerts, u.report_date DESC")
       rep_array    = Array.new
       reports.each_with_index do |report,index|
         rep_display = { 
@@ -95,13 +110,13 @@ class DBAccess
 
   #get the pages for the report_id and all error and alert count associated with the page
     def getReportDetails(report_id)
-      report_data            = Hash.new
-      summary                = getReportSummary(report_id)
-      report_data["errors"]  = getErrorDetails(report_id)
-      report_data["summary"] = summary
-      pages                  = Page.where("report_id = ? ",report_id)
-      page_array             = Array.new
-
+      report_data                = Hash.new
+      @report                    = Report.find(report_id)
+      report_data["errors"]      = getErrorDetails(report_id)
+      report_data["summary"]     = getReportSummary(@report)
+      report_data["old_reports"] = getOldReports(@report.id,@report.submit_id)
+      page_array                 = Array.new
+      pages                      = Page.where("report_id = ? ",report_id)
       pages.each do |pg|
         error_count = Category.includes(:page).where(page_id: pg.id, category_name: 'error').sum('count')
         errors      = Category.select(:description_name).where(page_id: pg.id, category_name: 'error')
@@ -121,26 +136,36 @@ class DBAccess
         page_array << pg_disply
       end
       report_data["pg_data"] = page_array
+
       return report_data
     end
 
-  #returns the data required for the summary of the report
-    def getReportSummary(id)
-      data                  = Hash.new
-      report                = Report.find(id)
-      data["pg_totl"]       = report.pages_total
-      tot_err               = report.total_errors
-      tot_alrt              = report.total_alerts
-      data["error_free"]    = (report.pages_total).to_i - (report.pages_error).to_i
-
-      if tot_err.nil?
-        data["error_totl"]    = 0
-        data["error_average"] = 0
-      else
-        data["error_totl"]    = tot_err
-        data["error_average"] = (tot_err.to_f / report.pages_total).round(2)
+  #get the data on earlier reports
+   def getOldReports(report_id,submit_id)
+       earlier_reports = Report.where(submit_id: submit_id)
+       old_rep_summary = Array.new
+       unless earlier_reports.nil? || earlier_reports.empty?
+        earlier_reports.each do |rep|
+          rep_summary  = {
+          "report_date" => rep.report_date,
+          "error_aver"  => rep.error_avg.round(2)
+         }
+         old_rep_summary << rep_summary
+        end
       end
+      return old_rep_summary
+   end
 
+
+
+  #returns the data required for the summary of the report
+    def getReportSummary(report)
+      data                  = Hash.new
+      data["pg_totl"]       = report.pages_total
+      data["error_totl"]    = report.total_errors
+      data["error_free"]    = (report.pages_total).to_i - (report.pages_error).to_i
+      data["error_average"] = report.error_avg.round(2)
+      tot_alrt              = report.total_alerts
       if tot_alrt.nil?
         data["alert_average"] = 0
       else
@@ -180,7 +205,8 @@ class DBAccess
   #delete the report 
     def delete_report(id)
      report = Report.find(id)
-     report.destroy
+     submit = Submit.find(report.submit_id)
+     destroy submit
     end
 
   #update requested report status to running:
@@ -189,9 +215,10 @@ class DBAccess
       report_request.update(report_run_status: 'running')
     end
 
-    def rerun_report(rep_id)
-        report_request = Submit.includes(:report).where(report_id: rep_id)
-        report_request.update(report_run_status: 'rerun')
+    def rerunReport(rep_id)
+        sub_id = Submit.joins(:reports).where(reports: {id: rep_id}).select("id")
+        report_req= Submit.find(sub_id)
+        report_req.update(report_run_status: 'rerun', submit_date: Time.now.strftime("%Y-%m-%d"))
     end
 
 end

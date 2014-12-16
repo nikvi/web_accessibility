@@ -1,14 +1,7 @@
 %header
 	%h1= "#{name}"
+%h2= @earlier_reports.length
 %h2 Report Summary
-%div
-	%span#pie_space
-	%span#piechart_before
-		%b Melbourne Uni Average
-		= pie_chart(@tot_data)
-	%span#piechart_after
-		%b.center This report
-		= pie_chart(@report_err)
 %table.styled.center
 	%thead
 		%tr
@@ -24,6 +17,17 @@
 			%td= "#{@report_sum["error_average"]}"
 			%td= "#{@report_sum["error_free"]}"
 			%td= "#{@report_sum["alert_average"]}"
+%div
+	%span#pie_space
+	%span#piechart_before
+		%b Melbourne Uni Average
+		= pie_chart(@tot_data)
+	%span#piechart_after
+		%b.center This report
+		= pie_chart(@report_err)
+%div
+	%span.center
+		= line_chart([{name:"Error_Average",data:@earlier_reports.map{ |rp| [rp['report_date'],rp['error_aver']]}}])
 
 %h2 Accessibility Report
 %table.styled

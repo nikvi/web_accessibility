@@ -43,14 +43,33 @@ class RunReports
 		      "email_id"  => rep.email_id,
 		      "array"     => (rep.pg_urls).split(',')
 		    }
-		    qv.query_wave(format_url_data(@report_req))
 		    begin
-				Pony.mail(:to => @report_req["email_id"], :subject => "Web Accessiblity Report: #{@report_req["rep_name"]} ", :body => "The accessiblity report for #{@report_req["rep_name"]} has been generated.", :from => 'web_accessiblity@unimelb.edu.au')
-		    	rep.update_attributes(report_run_status: 'complete')
-		    rescue
-				puts "Unable to send email for report: #{rep_id}"
-				rep.update_attributes(report_run_status: 'mail_fail')
+			    qv.query_wave(format_url_data(@report_req))
+			    sendMail(@report_req,'success')
+			    rep.update_attributes(report_run_status: 'complete')
+			rescue 
+				puts "failed"
+				sendMail(@report_req,'fail')
+				rep.update_attributes(report_run_status: 'failed')
+				#should delete from table?? (what if update fails???)
 			end
+		end
+	end
+
+	def sendMail(report_req,status)
+		begin
+		 case status
+		 when 'success'
+			Pony.mail(:to => report_req["email_id"], :subject => "Web Accessiblity Report: #{report_req["rep_name"]} ", 
+				   :body => "The accessiblity report for #{@report_req["rep_name"]} has been generated.", :from => 'web_accessiblity@unimelb.edu.au')
+	     when 'fail'
+            Pony.mail(:to => @report_req["email_id"], :subject => "Web Accessiblity Report: #{report_req["rep_name"]} ", 
+            		:body => "The accessiblity report for #{report_req["rep_name"]} has failed. Please rerun or resubmit the report.", :from => 'web_accessiblity@unimelb.edu.au')
+         end
+		rescue
+			puts "Unable to send email for report: #{report_req["submit_id"]}"
+            rep = Submit.find(report_req["submit_id"])
+			rep.update_attributes(report_run_status: 'mail_fail')
 		end
 	end
 

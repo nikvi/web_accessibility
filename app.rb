@@ -39,7 +39,7 @@
   end
 
   get '/rerunReport/:id' do
-    @@dataBase.rerun_report(params[:id])
+    @@dataBase.rerunReport(params[:id])
     haml :confirm_report
   end
 
@@ -82,11 +82,12 @@
   end
 
   get '/reportDetail/:id/:name' do |id,name|
-    report      = @@dataBase.getReportDetails(id)
-    @tot_data   = Hash[@@web_summary.sort]
-    @report_det = report["pg_data"]
-    @report_sum = report["summary"]
-    @report_err = get_hash_diff(report["errors"],@tot_data)
+    report           = @@dataBase.getReportDetails(id)
+    @tot_data        = Hash[@@web_summary.sort]
+    @report_det      = report["pg_data"]
+    @report_sum      = report["summary"]
+    @earlier_reports = report["old_reports"]
+    @report_err      = get_hash_diff(report["errors"],@tot_data)
     haml :reportDetail,:locals => { :name => name ,:id => id}
   end 
 
