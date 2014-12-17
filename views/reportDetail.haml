@@ -1,6 +1,5 @@
 %header
 	%h1= "#{name}"
-%h2= @earlier_reports.length
 %h2 Report Summary
 %table.styled.center
 	%thead
@@ -17,17 +16,20 @@
 			%td= "#{@report_sum["error_average"]}"
 			%td= "#{@report_sum["error_free"]}"
 			%td= "#{@report_sum["alert_average"]}"
+%br
 %div
 	%span#pie_space
 	%span#piechart_before
 		%b Melbourne Uni Average
-		= pie_chart(@tot_data)
+		= pie_chart @tot_data
 	%span#piechart_after
-		%b.center This report
-		= pie_chart(@report_err)
-%div
-	%span.center
-		= line_chart([{name:"Error_Average",data:@earlier_reports.map{ |rp| [rp['report_date'],rp['error_aver']]}}])
+		%b.center This Report
+		= pie_chart @report_err
+%br
+
+%div.center
+	%span{:style =>"width:51%;display: inline-block;text-align: center;margin:0 auto; position: relative;"}
+		= line_chart [{name:"This report",data:@timeline_data},{name: "Melbourne Uni Average",data: { Time.new.to_date => @@err_avg }}],{library:{hAxis: {title: "Report Run Date", format: 'dd MMM, y'},vAxis: {title: "Errors Per Page"},title: 'Average Errors Per Page',trendlines: { 1 => {pointSize: 0, enableInteractivity: false} },width: '500px', hieght: '300px'}}
 
 %h2 Accessibility Report
 %table.styled

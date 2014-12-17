@@ -32,11 +32,11 @@ class DBAccess
          @report.error_avg    = report_sum["error_avg"]
          @report.save
       end
-      cleanupOldData(@report.id,@submit.id)
+      cleanupOldPageData(@report.id,@submit.id)
     end
 
   #delete the pages and categories data for earlier reports:
-  def cleanupOldData(report_id,submit_id)
+  def cleanupOldPageData(report_id,submit_id)
      report_ids = Report.where(submit_id:submit_id).where.not(id: report_id).select("id")
     unless report_ids.nil? || report_ids.length==0
       Page.destroy_all(["report_id in (?)", report_ids])
@@ -80,6 +80,7 @@ class DBAccess
                           reports group by submit_id
                           ) mu inner join reports u on mu.submit_id = u.submit_id and mu.MaxCreated = u.report_date 
                           order by u.error_avg, u.pages_error, u.total_errors, u.total_alerts, u.report_date DESC")
+      
       rep_array    = Array.new
       reports.each_with_index do |report,index|
         rep_display = { 
@@ -94,8 +95,14 @@ class DBAccess
         }
         rep_array << rep_display
       end
-      error_sum = getAllErrors()
-      return  {"rep_data" => rep_array,"rep_errors" => error_sum}
+      page_count   = Page.count
+      error_sum      = getAllErrors()
+      if page_count != 0
+        totl_err_avg = (error_sum.values.sum.to_f/page_count).round(2)
+      else
+        totl_err_avg = 0
+      end
+      return  {"rep_data" => rep_array,"rep_errors" => error_sum,"site_err_average" => totl_err_avg}
     end
 
     def getAllErrors()
@@ -110,13 +117,13 @@ class DBAccess
 
   #get the pages for the report_id and all error and alert count associated with the page
     def getReportDetails(report_id)
-      report_data                = Hash.new
-      @report                    = Report.find(report_id)
-      report_data["errors"]      = getErrorDetails(report_id)
-      report_data["summary"]     = getReportSummary(@report)
-      report_data["old_reports"] = getOldReports(@report.id,@report.submit_id)
-      page_array                 = Array.new
-      pages                      = Page.where("report_id = ? ",report_id)
+      report_data                   = Hash.new
+      @report                       = Report.find(report_id)
+      report_data["errors"]         = getErrorDetails(report_id)
+      report_data["summary"]        = getReportSummary(@report)
+      report_data["rprts_timeline"] = getReportTimeline(@report.submit_id)
+      page_array                    = Array.new
+      pages                         = Page.where("report_id = ? ",report_id)
       pages.each do |pg|
         error_count = Category.includes(:page).where(page_id: pg.id, category_name: 'error').sum('count')
         errors      = Category.select(:description_name).where(page_id: pg.id, category_name: 'error')
@@ -136,24 +143,19 @@ class DBAccess
         page_array << pg_disply
       end
       report_data["pg_data"] = page_array
-
       return report_data
     end
 
-  #get the data on earlier reports
-   def getOldReports(report_id,submit_id)
-       earlier_reports = Report.where(submit_id: submit_id)
-       old_rep_summary = Array.new
-       unless earlier_reports.nil? || earlier_reports.empty?
-        earlier_reports.each do |rep|
-          rep_summary  = {
-          "report_date" => rep.report_date,
-          "error_aver"  => rep.error_avg.round(2)
-         }
-         old_rep_summary << rep_summary
+  #get the data on all reports  for provided submit_id
+   def getReportTimeline(submit_id)
+       all_reports      = Report.where(submit_id: submit_id).select("report_date","error_avg")
+       reports_timeline = Array.new
+       unless all_reports.nil? || all_reports.empty?
+        all_reports.each do |rep|
+          reports_timeline << [rep.report_date.to_date,rep.error_avg.round(2)]
         end
       end
-      return old_rep_summary
+      return reports_timeline
    end
 
 

@@ -81,12 +81,13 @@
     haml :confirm_report
   end
 
+  #gets information about the specified report
   get '/reportDetail/:id/:name' do |id,name|
     report           = @@dataBase.getReportDetails(id)
     @tot_data        = Hash[@@web_summary.sort]
     @report_det      = report["pg_data"]
     @report_sum      = report["summary"]
-    @earlier_reports = report["old_reports"]
+    @timeline_data   = report["rprts_timeline"]
     @report_err      = get_hash_diff(report["errors"],@tot_data)
     haml :reportDetail,:locals => { :name => name ,:id => id}
   end 
@@ -103,6 +104,7 @@
     reports       = @@dataBase.getAllReports()
     @web_array    = reports["rep_data"]
     @@web_summary = reports["rep_errors"]
+    @@err_avg   = reports["site_err_average"]
     haml :reportsGen 
   end
 
