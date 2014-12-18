@@ -14,11 +14,12 @@ require "haml"
 
 require "./app"
 
+require './env' if File.exists?('env.rb')
+
 set :run, false
 
 set :raise_errors, true
 
-haml_template = File.read(File.join('views','test.haml'))
 configure :production do
   Pony.options = {
       :via => :smtp,

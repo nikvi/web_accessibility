@@ -207,8 +207,7 @@ class DBAccess
   #delete the report 
     def delete_report(id)
      report = Report.find(id)
-     submit = Submit.find(report.submit_id)
-     destroy submit
+     Submit.destroy(report.submit_id)
     end
 
   #update requested report status to running:

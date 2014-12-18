@@ -6,8 +6,7 @@
   require_relative 'lib/databaseAccess'
   require_relative 'lib/runReports'
   require_relative 'lib/jobs/report_job'
-  #Dir.glob('./config/initializers/*.rb', &method(:require))
-
+  Dir.glob('./config/initializers/*.rb', &method(:require))
 
 
    #::Logger.class_eval { alias :write :'<<' }

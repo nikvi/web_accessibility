@@ -29,7 +29,7 @@
 
 %div.center
 	%span{:style =>"width:51%;display: inline-block;text-align: center;margin:0 auto; position: relative;"}
-		= line_chart [{name:"This report",data:@timeline_data},{name: "Melbourne Uni Average",data: { Time.new.to_date => @@err_avg }}],{library:{hAxis: {title: "Report Run Date", format: 'dd MMM, y'},vAxis: {title: "Errors Per Page"},title: 'Average Errors Per Page',trendlines: { 1 => {pointSize: 0, enableInteractivity: false} },width: '500px', hieght: '300px'}}
+		= line_chart [{name:"This report",data:@timeline_data},{name: "Melbourne Uni Average",data: { Time.new.to_date => @@err_avg }}],{library:{hAxis: {title: "Report Run Date", format: 'dd MMM, y'},vAxis: {title: "Errors Per Page"},title: 'Average Errors Per Page', fontSize: 18,fontName: "Roboto, Helvetica, Arial, sans-serif", trendlines: { 1 => {pointSize: 0, enableInteractivity: false} },width: '500px', hieght: '300px'}}
 
 %h2 Accessibility Report
 %table.styled

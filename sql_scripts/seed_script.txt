@@ -1,4 +1,8 @@
+require './lib/models/Category'
 SeedDump.dump(Category, file: 'db/seeds.rb')
+require './lib/models/Page'
 SeedDump.dump(Page, file: 'db/seeds.rb', append: true)
+require './lib/models/report.rb'
 SeedDump.dump(Report, file: 'db/seeds.rb', append: true)
-SeedDump.dump(Website, file: 'db/seeds.rb', append: true)
+require './lib/models/Submit'
+SeedDump.dump(Submit, file: 'db/seeds.rb', append: true)
