@@ -15,12 +15,6 @@
     #error_logger = ::File.new(::File.join(::File.dirname(::File.expand_path(__FILE__)),'log','error.log'),"a+")
 
   configure do
-    # logging is enabled by default in classic style applications,
-    # so `enable :logging` is not needed
-    #file = File.new("#{settings.root}/lib/log/#{settings.environment}.log", 'a+')
-    #@file.sync = true
-    #use Rack::CommonLogger,file
-    #use ::Rack::CommonLogger, access_logger
     @@dataBase = DBAccess.new
   end
 
