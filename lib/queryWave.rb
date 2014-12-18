@@ -22,9 +22,7 @@ class QueryWaveAPI
     puts url_data["name"]
   	 url_data["urls"].each do |u|
         resp = Net::HTTP.get_response(URI.parse(u))
-        #if resp.is_a?(Net::HTTPSuccess) & resp.body["success"]==true
-        case resp
-          when Net::HTTPSuccess
+        if resp.is_a?(Net::HTTPSuccess) & resp.body["success"]==true
             data = JSON.parse(resp.body)
             if(data["status"]["success"])    	    
                 page_url   = data["statistics"]["pageurl"]
@@ -48,9 +46,9 @@ class QueryWaveAPI
               puts "Error in Wave Response"
               puts JSON.parse(resp.body)
             end
-          else
+        else
         		puts "Invalid HTTP response for: "<< u
-          end
+        end
       end
         #persisting to database
     if !response_array.empty?

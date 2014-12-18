@@ -13,6 +13,7 @@ class RunReports
 		query_urls = Array.new
 		data["array"].each do |x| 
 	    	str = "#{WaveConfig::WAVE_API_URL}key=#{ENV['WAVE_API_KEY']}&url=#{x}&reporttype=#{WaveConfig::REPORT_TYPE}" 
+	    	puts str
 	    	query_urls.push str
 	  	end
 		return {"urls" => query_urls, "name" => data["rep_name"], "submit_id" => data["submit_id"] }
