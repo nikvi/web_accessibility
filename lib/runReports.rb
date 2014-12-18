@@ -47,8 +47,8 @@ class RunReports
 			    qv.query_wave(format_url_data(@report_req))
 			    sendMail(@report_req,'success')
 			    rep.update_attributes(report_run_status: 'complete')
-			rescue 
-				puts "failed"
+			rescue => error
+				puts "failed with error: " << error
 				sendMail(@report_req,'fail')
 				rep.update_attributes(report_run_status: 'failed')
 				#should delete from table?? (what if update fails???)
