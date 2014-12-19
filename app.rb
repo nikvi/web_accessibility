@@ -27,10 +27,12 @@
     redirect to('/reportsGen')
   end 
     
+  #show confrimation page for deletion of report 
   get '/deleteReport/:id/:name' do |id,name|
     haml :confirm, :locals => { :name => name, :id => id}
   end
 
+  # shown when rerun request is submitted
   get '/rerunReport/:id' do
     @@dataBase.rerunReport(params[:id])
     haml :confirm_report
@@ -43,13 +45,13 @@
   end
 
 
-  # form submit page to get the url
+  # intial form submit page where you provide the report requests
   get '/urlCheck' do 
     logger.warn(" in URL submit page")
     haml :submitURL 
   end 
 
-  #method to retrieve all the requests for reports
+  #method to retrieve all the requests for reports to be run
   get '/requestedReports'  do
    @report_req = @@dataBase.getReportRequests()
    haml :reportRun
@@ -63,7 +65,7 @@
     redirect to('/requestedReports')
   end
 
-  #submit  report request for a provided set of urls
+  #submits report request for a provided set of urls 
   post '/urlCheck' do 
     @url   = params[:rurl]
     @p_urls = params[:rmessage]
@@ -85,7 +87,9 @@
     haml :reportDetail,:locals => { :name => name ,:id => id}
   end 
 
-  # add the extra keys from report_smmary and provide value of zero
+  #used to display the pie chart for the specific report
+  #add the extra keys from report_smmary and provide value of zero
+  #that ensures the same colors in both pie charts reflect the same error type
   def get_hash_diff(report_data,overall_data)
     overall_data.each_key { |key| 
       report_data[key] = 0 unless report_data.has_key?(key)
@@ -93,6 +97,7 @@
     return Hash[report_data.sort]
   end
 
+ #used to retrieve and display all reports
   get '/reportsGen' do
     reports       = @@dataBase.getAllReports()
     @web_array    = reports["rep_data"]
