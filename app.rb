@@ -79,6 +79,9 @@
   #gets information about the specified report
   get '/reportDetail/:id/:name' do |id,name|
     report           = @@dataBase.getReportDetails(id)
+    if !defined? @@web_summary
+      get_allReports_summary()
+    end
     @tot_data        = Hash[@@web_summary.sort]
     @report_det      = report["pg_data"]
     @report_sum      = report["summary"]
@@ -87,7 +90,7 @@
     haml :reportDetail,:locals => { :name => name ,:id => id}
   end 
 
-  #used to display the pie chart for the specific report
+  #helper method to display the pie chart for the specific report
   #add the extra keys from report_smmary and provide value of zero
   #that ensures the same colors in both pie charts reflect the same error type
   def get_hash_diff(report_data,overall_data)
@@ -97,12 +100,17 @@
     return Hash[report_data.sort]
   end
 
- #used to retrieve and display all reports
-  get '/reportsGen' do
-    reports       = @@dataBase.getAllReports()
-    @web_array    = reports["rep_data"]
+ # initializing the class variables
+  def get_allReports_summary()
+    reports  = @@dataBase.getAllReports()
     @@web_summary = reports["rep_errors"]
     @@err_avg   = reports["site_err_average"]
+    return reports["rep_data"]
+  end
+
+ #to retrieve and display all reports
+  get '/reportsGen' do
+    @web_array  = get_allReports_summary()
     haml :reportsGen 
   end
 
